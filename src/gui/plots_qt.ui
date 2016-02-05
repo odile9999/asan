@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TabWidget_Plots</class>
+ <widget class="QTabWidget" name="TabWidget_Plots">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>TabWidget</string>
+  </property>
+  <property name="currentIndex">
+   <number>0</number>
+  </property>
+  <widget class="QWidget" name="tab_Signal">
+   <attribute name="title">
+    <string>Signal</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
+  </widget>
+  <widget class="QWidget" name="tab_Spectrum">
+   <attribute name="title">
+    <string>Spectrum</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_2"/>
+  </widget>
+  <widget class="QWidget" name="tab_Mass">
+   <attribute name="title">
+    <string>Mass</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_3"/>
+  </widget>
+  <widget class="QWidget" name="tab_Peaks">
+   <attribute name="title">
+    <string>Peaks</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_4"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
