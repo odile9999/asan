@@ -33,8 +33,8 @@ class Pipeline(object):
 
     def __process_file(self):
         """ operations on files """
-        data = Dataset(self.filename)
-        self.signal = data.signal
+        self.data = Dataset(self.filename)
+        self.spectrum = data.signal
         self.time = data.time
         self.mass = data.mass
         self.points = data.points
