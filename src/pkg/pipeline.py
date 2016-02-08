@@ -9,7 +9,7 @@ Process PIRENEA data.
 """
 
 import numpy as np
-from pkg.dataset import RawDataset
+from pkg.dataset import Dataset
 from pkg.peaks import Peaks
 from pkg.script import Script
 from pkg.spectrum import FrequencySpectrum
@@ -33,20 +33,12 @@ class Pipeline(object):
 
     def __process_file(self):
         """ operations on files """
-        self.raw = RawDataset(self.filename)
-        self.step = self.raw.step
-        self.points = self.raw.points
-        self.scr = None
-        # if script is available, get limits according excitation length
-        if self.raw.scriptable:
-            self.scr = Script(self.filename)
-            duration = self.scr.get_excit_duration()
-            self.start = round(duration / self.step)
-            self.end = round(self.points / 2)
-        # if script is not available, fix arbitrary limits
-        else:
-            self.start = 0
-            self.end = round(self.points / 2)
+        data = Dataset(self.filename)
+        self.signal = data.signal
+        self.time = data.time
+        self.mass = data.mass
+        self.points = data.points
+        self.scr = Script(self.filename)
 
     def process_signal(self, start=0, end=0, hann=False, half=False, zero=False, zero_twice=False):
         self.signal = self.raw.truncate(start, end)
