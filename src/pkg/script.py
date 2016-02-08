@@ -167,4 +167,4 @@ if __name__ == '__main__':
         print("text = ", text)
         print("format", "{:.1f}".format(float(eject[3])))
 else:
-    print("\nImporting... ", __name__)
+    log.info("Importing... %s", __name__)

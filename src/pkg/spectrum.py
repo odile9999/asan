@@ -10,6 +10,8 @@ Process mass and frequency spectra on PIRENEA data.
 import os
 from scipy import constants
 import numpy as np
+import logging
+log = logging.getLogger("root")
 
 
 class FrequencySpectrum(object):
@@ -253,4 +255,4 @@ if __name__ == '__main__':
     plt.show()
 
 else:
-    print("\nImporting... ", __name__)
+    log.info("Importing... %s", __name__)

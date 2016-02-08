@@ -14,6 +14,8 @@ from pkg.peaks import Peaks
 from pkg.script import Script
 from pkg.spectrum import FrequencySpectrum
 from pkg.spectrum import MassSpectrum
+import logging
+log = logging.getLogger("root")
 
 
 class Pipeline(object):
@@ -156,4 +158,4 @@ if __name__ == '__main__':
     plt.show()
 
 else:
-    print("\nImporting... %s", __name__)
+    log.info("Importing... %s", __name__)
