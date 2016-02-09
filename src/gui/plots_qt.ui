@@ -34,12 +34,6 @@
   <property name="currentIndex">
    <number>0</number>
   </property>
-  <widget class="QWidget" name="tab_Signal">
-   <attribute name="title">
-    <string>Signal</string>
-   </attribute>
-   <layout class="QVBoxLayout" name="verticalLayout"/>
-  </widget>
   <widget class="QWidget" name="tab_Spectrum">
    <attribute name="title">
     <string>Spectrum</string>

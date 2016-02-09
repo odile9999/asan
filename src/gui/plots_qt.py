@@ -19,11 +19,6 @@ class Ui_TabWidget_Plots(object):
         TabWidget_Plots.setSizePolicy(sizePolicy)
         TabWidget_Plots.setMinimumSize(QtCore.QSize(800, 500))
         TabWidget_Plots.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.tab_Signal = QtWidgets.QWidget()
-        self.tab_Signal.setObjectName("tab_Signal")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.tab_Signal)
-        self.verticalLayout.setObjectName("verticalLayout")
-        TabWidget_Plots.addTab(self.tab_Signal, "")
         self.tab_Spectrum = QtWidgets.QWidget()
         self.tab_Spectrum.setObjectName("tab_Spectrum")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.tab_Spectrum)
@@ -47,7 +42,6 @@ class Ui_TabWidget_Plots(object):
     def retranslateUi(self, TabWidget_Plots):
         _translate = QtCore.QCoreApplication.translate
         TabWidget_Plots.setWindowTitle(_translate("TabWidget_Plots", "TabWidget"))
-        TabWidget_Plots.setTabText(TabWidget_Plots.indexOf(self.tab_Signal), _translate("TabWidget_Plots", "Signal"))
         TabWidget_Plots.setTabText(TabWidget_Plots.indexOf(self.tab_Spectrum), _translate("TabWidget_Plots", "Spectrum"))
         TabWidget_Plots.setTabText(TabWidget_Plots.indexOf(self.tab_Mass), _translate("TabWidget_Plots", "Mass"))
         TabWidget_Plots.setTabText(TabWidget_Plots.indexOf(self.tab_Peaks), _translate("TabWidget_Plots", "Peaks"))

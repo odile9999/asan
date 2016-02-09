@@ -27,7 +27,7 @@ class Peaks(object):
         self.x = x
         self.y = y
 
-    def detect_peaks(self, x, mph=None, mpd=1, threshold=0, edge='rising',
+    def detect_peaks(self, x, mph=1.0, mpd=1, threshold=0, edge='rising',
                      kpsh=False, valley=False, show=False):
         """Detect peaks in data based on their amplitude and other features.
 
@@ -102,7 +102,6 @@ class Peaks(object):
         >>> # set threshold = 2
         >>> detect_peaks(x, threshold = 2, show=True)
         """
-
         x = np.atleast_1d(x).astype('float64')
         if x.size < 3:
             return np.array([], dtype=int)
@@ -170,6 +169,7 @@ class Peaks(object):
 
     def prepare_detect(self, ref, accuracy, xx, yy, startx, endx):
         # search values to detect peaks around a central value
+        print("inputs=", ref, accuracy, startx, endx)
         m = ref
         a = accuracy
         x = np.asarray(xx)
@@ -203,46 +203,19 @@ class Peaks(object):
 if __name__ == '__main__':
 
     import matplotlib.pyplot as plt
+    from pkg.dataset import Dataset
 
-    from pkg.dataset import RawDataset
-    from pkg.spectrum import FrequencySpectrum
-    from pkg.spectrum import MassSpectrum
+    filename = "G:\\HASSAN\\Aroma\\Spectra\\2016-01-28\\Cor_1.txt"
+#     filename = "G:\\HASSAN\\Aroma\\Spectra\\2016-01-28\\HS_mix_1.txt"
+    raw = Dataset(filename)
 
-    # step = 0.5 524288
-    filename = "G:\\PIRENEA_manips\\2014\\data_2014_06_26\\2014_06_26_011.A00"
-    filename = "G:\\PIRENEA_manips\\2014\\data_2014_07_30\\2014_07_30_001.A00"
+    x = np.asarray(raw.mass)
+    y = np.asarray(raw.spectrum)
 
-    data = RawDataset(filename)
-    data.hann()  # half window
+    plt.plot(x, y)
 
-    points = len(data.signal)
-    start = data.start
-    end = round(points / 2)
-    data.truncate(start, end)
-
-    print("len signal=", len(data.signal))
-    print("len truncated=", len(data.truncated))
-
-    signal = data.truncated
-
-    # Real FFT on complete signal
-    step = data.step
-    print("step=", step)
-    fs = FrequencySpectrum(signal, step)
-    y = fs.spectrum * 1000.0        # ??? according to Anthony
-    # x = fs.freq / 1000.0            # in kHz
-
-    # Calculate mass
-    x = fs.freq
-    ms = MassSpectrum(x, y)
-    # Auto calib
-    ref_mass = 300.0939
-    accuracy = 0.1
-    # ref_mass = 18.0
-    ms.basic_recalibrate(ref_mass, accuracy)
-    x = ms.mass
-
-    delta = 10.0
+    ref_mass = 300.0
+    delta = 20.0
     startx = ref_mass - delta / 2
     endx = ref_mass + delta / 2
     accuracy = 1.0
@@ -250,13 +223,15 @@ if __name__ == '__main__':
 
     mph, mpd, mask = p.prepare_detect(ref_mass, accuracy, x, y, startx, endx)
     print("type mask", type(mask))
-    print("mph=", mph, " mpd=", mpd, "len de mask y", len(y[mask]))
+    print("mph=", mph, " mpd=", mpd)
     # Detect peak on rising edge
     edge = 'rising'
     # Detect peak greater than threshold
     threshold = 0.0
     # Don't use default plot
-    show = False
+    mph = 400.0
+    mpd = 50
+    print(y[mask][0])
 
     ind = p.detect_peaks(y[mask], mph, mpd, threshold, edge)
     print("type ind", type(ind))

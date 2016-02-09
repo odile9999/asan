@@ -38,45 +38,6 @@
     <property name="title">
      <string>Mass Calibration</string>
     </property>
-    <widget class="QLabel" name="label_RefMass">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>31</y>
-       <width>95</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Ref. mass (u)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_CycloFreq">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>60</y>
-       <width>95</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Cycl. Freq. (kHz)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_MagFreq">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>95</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Mag. Freq (kHz)</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_PlotStartMass">
      <property name="geometry">
       <rect>
@@ -101,81 +62,6 @@
      </property>
      <property name="text">
       <string>Hold</string>
-     </property>
-    </widget>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_RefMass">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>30</y>
-       <width>70</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::NoButtons</enum>
-     </property>
-     <property name="decimals">
-      <number>5</number>
-     </property>
-     <property name="maximum">
-      <double>1000.000000000000000</double>
-     </property>
-     <property name="value">
-      <double>303.093900000000019</double>
-     </property>
-    </widget>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_CycloFreq">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>60</y>
-       <width>70</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::NoButtons</enum>
-     </property>
-     <property name="decimals">
-      <number>5</number>
-     </property>
-     <property name="maximum">
-      <double>1000.000000000000000</double>
-     </property>
-     <property name="value">
-      <double>255.727000000000004</double>
-     </property>
-    </widget>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_MagFreq">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>90</y>
-       <width>70</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::NoButtons</enum>
-     </property>
-     <property name="decimals">
-      <number>5</number>
-     </property>
-     <property name="maximum">
-      <double>100.000000000000000</double>
-     </property>
-     <property name="value">
-      <double>0.001000000000000</double>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBox_PlotMassX1">
@@ -310,6 +196,9 @@
      </property>
      <property name="decimals">
       <number>3</number>
+     </property>
+     <property name="maximum">
+      <double>10000.000000000000000</double>
      </property>
     </widget>
     <widget class="QSpinBox" name="spinBox_PeakDistance">
@@ -476,28 +365,8 @@
      <string>FILENAME</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_AutoUpdate">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>770</x>
-      <y>130</y>
-      <width>101</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Auto Update</string>
-    </property>
-   </widget>
   </widget>
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup_Hann"/>
-  <buttongroup name="buttonGroup_Zero"/>
- </buttongroups>
 </ui>

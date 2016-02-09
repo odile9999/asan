@@ -34,7 +34,6 @@ class MainWindowGUI(QMainWindow):
         self.ana = self.ui.dockWidget_Analysis
         self.ana.ui.setupUi(self.ui.dockWidget_Analysis)
         self.ana.setup(self.ds)
-        print("end of analysis")
 
     def add_parameters(self):
         self.par = self.ui.dockWidget_Parameters

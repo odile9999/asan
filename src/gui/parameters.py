@@ -35,33 +35,16 @@ class ParametersGUI(QDockWidget):
 
     def fill_params(self, filename, pipeline):
         log.debug("event from %s", self.sender())
-        short = str(filename).split(sep="\\")
-        self.ui.lineEdit_Date.setText(short[-1])
+        shortname = str(filename).split(sep="\\")
+        self.ui.lineEdit_Date.setText(shortname[-1])
 
-        if pipeline.raw.scriptable:
-            self.enable_parameters_box()
-            self.script = pipeline.scr
-            self.update_header()
-        else:
-            self.disable_parameters_box()
-
-    def enable_parameters_box(self):
-        self.ui.label_Date.setVisible(True)
-        self.ui.lineEdit_Date.setVisible(True)
-        self.ui.label_Header.setVisible(True)
-        self.ui.plainTextEdit_Header.setVisible(True)
-
-    def disable_parameters_box(self):
-        self.ui.label_Date.setVisible(False)
-        self.ui.lineEdit_Date.setVisible(False)
-        self.ui.label_Header.setVisible(False)
-        self.ui.plainTextEdit_Header.setVisible(False)
+        self.pipeline = pipeline
+        self.update_header()
 
     def update_header(self):
-        self.ui.lineEdit_Date.clear()
-        self.ui.textEdit_Header.clear()
-        self.ui.plainTextEdit_Header.set_text("toto")
-
+        #         self.ui.plainTextEdit_Header.clear()
+        self.ui.plainTextEdit_Header.setPlainText(self.pipeline.headtext)
+        log.info("END of parameters...")
 
 if __name__ == '__main__':
     pass

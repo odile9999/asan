@@ -33,27 +33,13 @@ class Pipeline(object):
 
     def __process_file(self):
         """ operations on files """
-        self.data = Dataset(self.filename)
-        self.spectrum = data.signal
-        self.time = data.time
-        self.mass = data.mass
-        self.points = data.points
-        self.scr = Script(self.filename)
-
-    def process_signal(self, start=0, end=0, hann=False, half=False, zero=False, zero_twice=False):
-        self.signal = self.raw.truncate(start, end)
-        if hann:
-            self.signal = self.raw.hann(self.signal, half=False)
-        if half:
-            self.signal = self.raw.hann(self.signal, half=True)
-        if zero:
-            dummy = np.zeros(self.points)
-            dummy[0:(end - start)] = self.signal
-            self.signal = dummy
-        if zero_twice:
-            dummy = np.zeros(self.points * 2)
-            dummy[0:(end - start)] = self.signal
-            self.signal = dummy
+        data = Dataset(self.filename)
+        if data.points > 0:
+            self.spectrum = data.spectrum
+            self.time = data.time
+            self.mass = data.mass
+            self.points = data.points
+        self.headtext = data.headtext
 
     def process_spectrum(self, factor=1000.0, ref_mass=0.0, cyclo_freq=0.0, mag_freq=0.0):
         #         t = time.time()
@@ -79,13 +65,15 @@ class Pipeline(object):
             self.ms.basic_recalibrate(self.ref_mass, self.accuracy)
 
     def process_peaks(self, mph=0.0, mpd=0, startx=0.0, endx=0.0):
+        log.info("process_peaks")
 
         if mph > 0:
             self.mph = mph
         if mpd > 0:
             self.mpd = mpd
-        x = self.mass
-        y = self.spectrum
+
+        x = np.asarray(self.mass)
+        y = np.asarray(self.spectrum)
         p = Peaks()
         ref = startx + (abs(endx - startx) / 2)
         delta = 1.0
@@ -98,8 +86,6 @@ class Pipeline(object):
         threshold = 0.0
         # Don't use default plot
         ind = p.detect_peaks(y[mask], self.mph, self.mpd, threshold, edge)
-#             print("mass =", x[mask][ind])
-#             print("inten=", y[mask][ind])
 
         self.mph = mph
         self.mpd = mpd

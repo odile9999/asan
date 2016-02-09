@@ -43,14 +43,7 @@ class PlotsGUI(QTabWidget):
         self.__setup_plots()
 
     def __setup_plots(self):
-        # Signal
-        self.mpl_sig = MatplotlibWidget(
-            title='Signal', xlabel='n/a', ylabel='n/a', dpi=70)
-        self.mpl_sig.setObjectName("matplotlibwidget_Signal")
-        self.ui.verticalLayout.addWidget(self.mpl_sig)
-        navigation = NavigationToolbar(self.mpl_sig, self)
-        self.ui.verticalLayout.addWidget(navigation)
-        # Frequency spectrum
+        # Time spectrum
         self.mpl_spec = MatplotlibWidget(
             title='Spectrum', xlabel='n/a', ylabel='n/a', dpi=70)
         self.mpl_spec.setObjectName("matplotlibwidget_Spectrum")
@@ -75,25 +68,16 @@ class PlotsGUI(QTabWidget):
         self.setCurrentIndex(0)
 
     def __connect_events(self):
-        self.ana.plotSigRaisedSignal.connect(self.update_signal)
         self.ana.plotSpecRaisedSignal.connect(self.update_spectrum)
         self.ana.plotMassRaisedSignal.connect(self.update_mass)
         self.ana.plotPeaksRaisedSignal.connect(self.update_peaks)
 
-    def update_signal(self, shortname, y, step, start, end):
-        title = shortname + " - signal - " + \
-            "(" + str(start) + ", " + str(end) + ")"
-        x = np.arange(len(y)) * step * 1e3  # in ms
-        self.mpl_sig.plot_data(x, y, title, "time (ms)", "a.u.")
+    def update_spectrum(self, shortname, y, x):
+        title = shortname + " - time spectrum"
+        self.mpl_spec.plot_data(x, y, title, "Time (ns)", "a.u.")
 
-    def update_spectrum(self, shortname, y, freq):
-        title = shortname + " - frequency spectrum"
-        x = freq / 1e3  # in kHz
-        self.mpl_spec.plot_data(x, y, title, "Freq. (kHz)", "a.u.")
-
-    def update_mass(self, shortname, y, mass, ref, cyclo, mag, hold):
-        title = shortname + " - mass spectrum - " + \
-            "(" + str(ref) + ", " + str(cyclo) + ", " + str(mag) + ")"
+    def update_mass(self, shortname, y, mass, ref, hold):
+        title = shortname + " - mass spectrum - " + "(" + str(ref) + ")"
         x = mass
         self.mpl_mass.plot_mass(x, y, title, "Mass (u)", "a.u.", hold)
 
