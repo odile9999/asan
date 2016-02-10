@@ -74,7 +74,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "SOFA"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "ASAN"))
 
 from gui.analysis import AnalysisGUI
 from gui.data_selector import DataSelectorGUI

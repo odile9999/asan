@@ -180,6 +180,8 @@ class Peaks(object):
         # create a mask for start to end values
         mask = [(x >= (startx)) & (x <= (endx))]
         # minimum peak height (to avoid peaks of noise)
+        ave = np.average(y[mask])
+        print("average=", ave, ave * 5.0)
         mph = np.max(y[mask]) / 50.0
 
         return mph, mpd, mask
@@ -198,6 +200,17 @@ class Peaks(object):
             else:
                 res[index] = 0.0
         return res
+
+    def get_peaks(self, x, y, startx, endx, threshold, edge):
+
+        ref = startx + (abs(endx - startx) / 2)
+        delta = 1.0
+        mph, mpd, mask = self.prepare_detect(ref, delta, x, y, startx, endx)
+
+        yy = np.asarray(y)
+        ind = self.detect_peaks(yy[mask], mph, mpd, threshold, edge)
+
+        return mph, mpd, mask, ind
 
 
 if __name__ == '__main__':

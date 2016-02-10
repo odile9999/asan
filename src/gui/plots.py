@@ -45,7 +45,7 @@ class PlotsGUI(QTabWidget):
     def __setup_plots(self):
         # Time spectrum
         self.mpl_spec = MatplotlibWidget(
-            title='Spectrum', xlabel='n/a', ylabel='n/a', dpi=70)
+            title='Time', xlabel='n/a', ylabel='n/a', dpi=70)
         self.mpl_spec.setObjectName("matplotlibwidget_Spectrum")
         self.ui.verticalLayout_2.addWidget(self.mpl_spec)
         navigation = NavigationToolbar(self.mpl_spec, self)
@@ -57,7 +57,7 @@ class PlotsGUI(QTabWidget):
         self.ui.verticalLayout_3.addWidget(self.mpl_mass)
         navigation = NavigationToolbar(self.mpl_mass, self)
         self.ui.verticalLayout_3.addWidget(navigation)
-        # Mass spectrum
+        # Peaks spectrum
         self.mpl_peaks = MatplotlibWidget(
             title='Peaks', xlabel='n/a', ylabel='n/a', dpi=70)
         self.mpl_peaks.setObjectName("matplotlibwidget_Peaks")

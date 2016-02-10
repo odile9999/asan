@@ -36,7 +36,7 @@
   </property>
   <widget class="QWidget" name="tab_Spectrum">
    <attribute name="title">
-    <string>Spectrum</string>
+    <string>Time</string>
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout_2"/>
   </widget>

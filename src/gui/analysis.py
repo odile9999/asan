@@ -57,6 +57,7 @@ class AnalysisGUI(QDockWidget):
 
     def mass_event(self):
         log.debug("event from %s", self.sender())
+        self.ref_mass = float(self.ui.doubleSpinBox_RefMass.value())
         self.mass_x1 = float(self.ui.doubleSpinBox_PlotMassX1.value())
         self.mass_x2 = float(self.ui.doubleSpinBox_PlotMassX2.value())
         self.hold = self.ui.checkBox_Hold.isChecked()
@@ -72,6 +73,7 @@ class AnalysisGUI(QDockWidget):
         # Mass calib
         self.ui.doubleSpinBox_PlotMassX1.setValue(10.0)
         self.ui.doubleSpinBox_PlotMassX2.setValue(1000.0)
+        self.ui.doubleSpinBox_RefMass.setValue(300.0)
         self.ui.checkBox_Hold.setChecked(False)
         # peak detection
         self.ui.doubleSpinBox_PeakHeight.setValue(400.0)
@@ -110,6 +112,7 @@ class AnalysisGUI(QDockWidget):
 
     def emit_plot_signals(self):
         log.debug("event from %s", self.sender())
+        # Check if data are available
         if self.pip.points > 0:
             self.update_pipeline()
 
@@ -117,13 +120,19 @@ class AnalysisGUI(QDockWidget):
                 self.shortname, self.pip.spectrum, self.pip.time)
 
             log.debug("Emit1")
-#         x = self.pip.mass
-#         mask = [(x >= self.mass_x1) & (x <= self.mass_x2)]
-#         x = self.pip.mass[mask]
-#         y = self.pip.spectrum[mask]
-#         self.plotMassRaisedSignal.emit(
-#             self.shortname, y, x,
-#             float(self.ref_mass), bool(self.hold))
+
+            x = np.asarray(self.pip.mass)
+            log.debug("Emit2")
+            print(self.mass_x1)
+            print("type=", x.type())
+            mask = [(x >= self.mass_x1) & (x <= self.mass_x2)]
+            log.debug("Emit3")
+            x = self.pip.mass[mask]
+            y = self.pip.spectrum[mask]
+            log.debug("Emit4")
+            self.plotMassRaisedSignal.emit(
+                self.shortname, y, x,
+                float(self.ref_mass), bool(self.hold))
 #
 #         log.debug("Emit2")
 #         x = self.pip.mass[self.pip.mask]

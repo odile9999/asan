@@ -28,9 +28,9 @@ class Dataset(object):
         """
         self.filename = filename
         self.points = 0
-        self.spectrum = []
         self.time = []
         self.mass = []
+        self.spectrum = []
         self.headtext = ""
 
         self.__read_file()
@@ -78,6 +78,7 @@ if __name__ == '__main__':
     filename = "G:\\HASSAN\\Aroma\\Spectra\\2016-01-28\\Cor_1.txt"
 #     filename = "G:\\HASSAN\\Aroma\\Spectra\\2016-01-28\\HS_mix_1.txt"
     raw = Dataset(filename)
+    mass = raw.mass
 
 else:
     log.info("Importing... %s", __name__)

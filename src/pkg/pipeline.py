@@ -41,29 +41,6 @@ class Pipeline(object):
             self.points = data.points
         self.headtext = data.headtext
 
-    def process_spectrum(self, factor=1000.0, ref_mass=0.0, cyclo_freq=0.0, mag_freq=0.0):
-        #         t = time.time()
-        fs = FrequencySpectrum(self.signal, self.step)
-#         t1 = time.time() - t
-        self.spectrum = fs.spectrum * factor
-        self.freq = fs.freq            # in Hz
-        ms = MassSpectrum(self.freq, ref_mass, cyclo_freq, mag_freq)
-        self.mass = ms.mass
-
-#     def get_excit_duration(self):
-#         buffer, excitation = self.scr.get_excit()
-#         if excitation:
-#             return buffer[0][3]
-#         else:
-#             return 0.0
-
-    def mass_recalibrate(self, ref_mass=0.0, accuracy=0.1):
-        # Auto calib
-        self.ref_mass = ref_mass
-        self.accuracy = accuracy
-        if ref_mass > 0.0:
-            self.ms.basic_recalibrate(self.ref_mass, self.accuracy)
-
     def process_peaks(self, mph=0.0, mpd=0, startx=0.0, endx=0.0):
         log.info("process_peaks")
 
@@ -72,8 +49,8 @@ class Pipeline(object):
         if mpd > 0:
             self.mpd = mpd
 
-        x = np.asarray(self.mass)
-        y = np.asarray(self.spectrum)
+        x = self.mass
+        y = self.spectrum
         p = Peaks()
         ref = startx + (abs(endx - startx) / 2)
         delta = 1.0
@@ -85,6 +62,33 @@ class Pipeline(object):
         # Detect peak greater than threshold
         threshold = 0.0
         # Don't use default plot
+        # CAUTION !! y must be transformed in np.asarray !!
+        y = np.asarray(self.spectrum)
+        ind = p.detect_peaks(y[mask], self.mph, self.mpd, threshold, edge)
+
+        self.mph = mph
+        self.mpd = mpd
+        self.mask = mask
+        self.ind = ind
+
+    def process_peaks2(self, mph=0.5, mpd=1, startx=0.0, endx=0.0):
+        log.info("process_peaks2")
+
+        x = self.mass
+        y = self.spectrum
+
+        p = Peaks()
+        # Detect peak on rising edge
+        edge = 'rising'
+        # Detect peak greater than threshold
+        threshold = 0.0
+
+        mph, mpd, mask, ind = p.get_peaks(
+            x, y, startx, endx, mph, mpd, threshold, edge)
+
+        # Don't use default plot
+        # CAUTION !! y must be transformed in np.asarray !!
+        y = np.asarray(self.spectrum)
         ind = p.detect_peaks(y[mask], self.mph, self.mpd, threshold, edge)
 
         self.mph = mph

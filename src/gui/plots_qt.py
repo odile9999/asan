@@ -42,7 +42,7 @@ class Ui_TabWidget_Plots(object):
     def retranslateUi(self, TabWidget_Plots):
         _translate = QtCore.QCoreApplication.translate
         TabWidget_Plots.setWindowTitle(_translate("TabWidget_Plots", "TabWidget"))
-        TabWidget_Plots.setTabText(TabWidget_Plots.indexOf(self.tab_Spectrum), _translate("TabWidget_Plots", "Spectrum"))
+        TabWidget_Plots.setTabText(TabWidget_Plots.indexOf(self.tab_Spectrum), _translate("TabWidget_Plots", "Time"))
         TabWidget_Plots.setTabText(TabWidget_Plots.indexOf(self.tab_Mass), _translate("TabWidget_Plots", "Mass"))
         TabWidget_Plots.setTabText(TabWidget_Plots.indexOf(self.tab_Peaks), _translate("TabWidget_Plots", "Peaks"))
 

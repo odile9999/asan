@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1050</width>
-    <height>200</height>
+    <width>900</width>
+    <height>120</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1050</width>
-    <height>200</height>
+    <width>900</width>
+    <height>120</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -29,10 +29,10 @@
    <widget class="QGroupBox" name="groupBox_Mass">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>10</x>
       <y>10</y>
-      <width>340</width>
-      <height>150</height>
+      <width>331</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="title">
@@ -42,7 +42,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>120</y>
+       <y>55</y>
        <width>95</width>
        <height>16</height>
       </rect>
@@ -55,7 +55,7 @@
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>120</y>
+       <y>55</y>
        <width>70</width>
        <height>17</height>
       </rect>
@@ -68,7 +68,7 @@
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>120</y>
+       <y>55</y>
        <width>60</width>
        <height>20</height>
       </rect>
@@ -93,7 +93,7 @@
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>120</y>
+       <y>55</y>
        <width>60</width>
        <height>20</height>
       </rect>
@@ -114,12 +114,50 @@
       <double>600.000000000000000</double>
      </property>
     </widget>
+    <widget class="QLabel" name="label_RefMass">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>31</y>
+       <width>95</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Ref. mass (u)</string>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_RefMass">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>30</y>
+       <width>70</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="decimals">
+      <number>5</number>
+     </property>
+     <property name="maximum">
+      <double>1000.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>303.093900000000019</double>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_Peak">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>40</y>
+      <x>360</x>
+      <y>10</y>
       <width>340</width>
       <height>81</height>
      </rect>
@@ -299,8 +337,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>130</y>
+      <x>720</x>
+      <y>60</y>
       <width>110</width>
       <height>23</height>
      </rect>
@@ -328,8 +366,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>10</y>
+      <x>720</x>
+      <y>30</y>
       <width>133</width>
       <height>20</height>
      </rect>
@@ -355,7 +393,7 @@
    <widget class="QLabel" name="label_Filename">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>720</x>
       <y>10</y>
       <width>60</width>
       <height>16</height>
