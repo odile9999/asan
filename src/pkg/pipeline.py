@@ -11,9 +11,6 @@ Process PIRENEA data.
 import numpy as np
 from pkg.dataset import Dataset
 from pkg.peaks import Peaks
-from pkg.script import Script
-from pkg.spectrum import FrequencySpectrum
-from pkg.spectrum import MassSpectrum
 import logging
 log = logging.getLogger("root")
 
@@ -41,60 +38,39 @@ class Pipeline(object):
             self.points = data.points
         self.headtext = data.headtext
 
-    def process_peaks(self, mph=0.0, mpd=0, startx=0.0, endx=0.0):
-        log.info("process_peaks")
+    def process_peaks(self, mph=0.0, mpd=0, x1=0.0, x2=0.0):
+        log.info("enter")
 
-        if mph > 0:
-            self.mph = mph
-        if mpd > 0:
-            self.mpd = mpd
-
-        x = self.mass
-        y = self.spectrum
-        p = Peaks()
-        ref = startx + (abs(endx - startx) / 2)
-        delta = 1.0
-
-        mph, mpd, mask = p.prepare_detect(ref, delta, x, y, startx, endx)
-
-        # Detect peak on rising edge
-        edge = 'rising'
-        # Detect peak greater than threshold
-        threshold = 0.0
-        # Don't use default plot
-        # CAUTION !! y must be transformed in np.asarray !!
+        x = np.asarray(self.mass)
         y = np.asarray(self.spectrum)
-        ind = p.detect_peaks(y[mask], self.mph, self.mpd, threshold, edge)
 
-        self.mph = mph
-        self.mpd = mpd
+        p = Peaks()
+
+        mph_o, mpd_o, mask, ind = p.get_peaks(x, y, x1, x2, mph, mpd)
+
         self.mask = mask
         self.ind = ind
 
-    def process_peaks2(self, mph=0.5, mpd=1, startx=0.0, endx=0.0):
-        log.info("process_peaks2")
+        return mph_o, mpd_o
 
-        x = self.mass
-        y = self.spectrum
+    def get_x1_x2_mass(self, mass_x1, mass_x2):
 
-        p = Peaks()
-        # Detect peak on rising edge
-        edge = 'rising'
-        # Detect peak greater than threshold
-        threshold = 0.0
-
-        mph, mpd, mask, ind = p.get_peaks(
-            x, y, startx, endx, mph, mpd, threshold, edge)
-
-        # Don't use default plot
-        # CAUTION !! y must be transformed in np.asarray !!
+        x = np.asarray(self.mass)
         y = np.asarray(self.spectrum)
-        ind = p.detect_peaks(y[mask], self.mph, self.mpd, threshold, edge)
+        mask = [(x >= mass_x1) & (x <= mass_x2)]
+#         print("xmask, ymask", x[mask], y[mask])
+        return x[mask], y[mask]
 
-        self.mph = mph
-        self.mpd = mpd
-        self.mask = mask
-        self.ind = ind
+    def get_mask_peaks(self):
+        log.info("enter")
+
+        x = np.asarray(self.mass)
+        y = np.asarray(self.spectrum)
+        xx = x[self.mask]
+        yy = y[self.mask]
+
+        return xx, yy, xx[self.ind], yy[self.ind]
+
 
 if __name__ == '__main__':
 

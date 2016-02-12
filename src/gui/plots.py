@@ -68,25 +68,27 @@ class PlotsGUI(QTabWidget):
         self.setCurrentIndex(0)
 
     def __connect_events(self):
-        self.ana.plotSpecRaisedSignal.connect(self.update_spectrum)
+        self.ana.plotTimeRaisedSignal.connect(self.update_time)
         self.ana.plotMassRaisedSignal.connect(self.update_mass)
         self.ana.plotPeaksRaisedSignal.connect(self.update_peaks)
 
-    def update_spectrum(self, shortname, y, x):
+    def update_time(self, shortname, x, y):
         title = shortname + " - time spectrum"
         self.mpl_spec.plot_data(x, y, title, "Time (ns)", "a.u.")
 
-    def update_mass(self, shortname, y, mass, ref, hold):
-        title = shortname + " - mass spectrum - " + "(" + str(ref) + ")"
+    def update_mass(self, shortname, mass, y, hold):
+        log.info("update_mass")
+        title = shortname + " - mass spectrum"
         x = mass
         self.mpl_mass.plot_mass(x, y, title, "Mass (u)", "a.u.", hold)
 
-    def update_peaks(self, shortname, y, mass, ind, mph, mpd, x1, x2):
+    def update_peaks(self, shortname, mass, y, xind, yind, mph, mpd, x1, x2):
         title = shortname + " - mass spectrum - " + \
             "(mph=" + str(mph) + ", mpd=" + str(mpd) + ")"
         x = mass
+        print("titile=", title)
         self.mpl_peaks.plot_peaks(
-            x, y, ind, title, "Mass (u)", "a.u.", x1, x2)
+            x, y, xind, yind, title, "Mass (u)", "a.u.", x1, x2)
 
 
 class MatplotlibWidget(Canvas):
@@ -119,7 +121,7 @@ class MatplotlibWidget(Canvas):
         self.ax.set_ylabel(ylabel)
         self.draw()
 
-    def plot_peaks(self, x, y, ind, title, xlabel, ylabel, x1=-1.0, x2=-1.0):
+    def plot_peaks(self, x, y, xind, yind, title, xlabel, ylabel, x1=-1.0, x2=-1.0):
         min_x = x1
         max_x = x2
         # dummy plot to apply the hold=True command
@@ -130,7 +132,7 @@ class MatplotlibWidget(Canvas):
         self.ax.hold(True)
 #         self.ax.plot(x, y)
         self.ax.plot(x, y, 'b')
-        self.ax.plot(x[ind], y[ind], '+', mfc=None, mec='r', mew=2, ms=8)
+        self.ax.plot(xind, yind, '+', mfc=None, mec='r', mew=2, ms=8)
         self.ax.set_title(title, size=10)
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)
@@ -141,11 +143,9 @@ class MatplotlibWidget(Canvas):
             max_x = x2
         self.ax.axis([min_x, max_x, y1, y2])
         # test annotations
-        x = x[ind]
-        y = y[ind]
-        for i, j in zip(x, y):
-            text = "{:.3f}".format(float(j)) + " (" + \
-                "{:.4f}".format(float(i)) + ")"
+        for i, j in zip(xind, yind):
+            text = "{:.0f}".format(float(j)) + " (" + \
+                "{:.3f}".format(float(i)) + ")"
 #             self.ax.annotate("{:.3f}".format(float(j)), xy=(i, j), size=10)
             self.ax.annotate(text, xy=(i, j), xytext=(i, j), size=10)
         self.draw()
