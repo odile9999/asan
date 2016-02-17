@@ -27,6 +27,7 @@ class AnalysisGUI(QDockWidget):
     plotMassRaisedSignal = pyqtSignal(object, object, object, bool)
     plotPeaksRaisedSignal = pyqtSignal(
         object, object, object, object, object, float, int, float, float)
+    plotClearRaisedSignal = pyqtSignal(bool, bool)
 
     def __init__(self, parent=None):
         """
@@ -90,16 +91,17 @@ class AnalysisGUI(QDockWidget):
         log.info("PIPELINE started...")
         self.pip = Pipeline(filename)
 
+        self.shortname = self.pip.datetime + " - " + self.shortname
+
         # Update parameters box
         self.parametersRaisedSignal.emit(filename, self.pip)
         # Update masstab_viewer box
         self.masstabRaisedSignal.emit(filename, self.pip)
         # Update plots with user input values
-        if self.pip.points > 0:
-            self.ui.pushButton_UpdatePlots.setEnabled(True)
-            self.mass_event()
-            self.peaks_event()
-            self.emit_plot_signals()
+        self.ui.pushButton_UpdatePlots.setEnabled(True)
+        self.mass_event()
+        self.peaks_event()
+        self.emit_plot_signals()
 
     def emit_plot_signals(self):
         log.debug("event from %s", self.sender())
@@ -108,50 +110,33 @@ class AnalysisGUI(QDockWidget):
         y = self.pip.spectrum
         self.plotTimeRaisedSignal.emit(self.shortname, x, y)
 
-        # Update plot for mass
-        x, y = self.pip.get_x1_x2_mass(self.mass_x1, self.mass_x2)
-        self.plotMassRaisedSignal.emit(self.shortname, x, y, bool(self.hold))
+        print("OK after time plot")
 
-        # Process peaks with last input values
-        mph, mpd = self.pip.process_peaks(
-            self.mph, self.mpd, self.peaks_x1, self.peaks_x2)
-        self.ui.spinBox_PeakDistanceFound.setValue(mpd)
-        self.ui.doubleSpinBox_PeakHeightFound.setValue(mph)
-        # Update plot for peaks
-        print("before peaks")
+        if self.pip.isCalibAvailable:
+            self.plotClearRaisedSignal.emit(False, False)
+            # Update plot for mass
+            x, y = self.pip.get_x1_x2_mass(self.mass_x1, self.mass_x2)
+            self.plotMassRaisedSignal.emit(
+                self.shortname, x, y, bool(self.hold))
 
-        x, y, xind, yind = self.pip.get_mask_peaks()
-        print("before peaks2", xind, yind)
-        self.plotPeaksRaisedSignal.emit(
-            self.shortname, x, y, xind, yind,
-            float(self.mph), int(self.mpd), float(self.peaks_x1),
-            float(self.peaks_x2))
-        print("before peaks3")
+            # Process peaks with last input values
+            mph, mpd = self.pip.process_peaks(
+                self.mph, self.mpd, self.peaks_x1, self.peaks_x2)
+            self.ui.spinBox_PeakDistanceFound.setValue(mpd)
+            self.ui.doubleSpinBox_PeakHeightFound.setValue(mph)
+            # Update plot for peaks
+            print("before peaks")
 
+            x, y, xind, yind = self.pip.get_mask_peaks()
+            print("before peaks2", xind, yind)
+            self.plotPeaksRaisedSignal.emit(
+                self.shortname, x, y, xind, yind,
+                float(self.mph), int(self.mpd), float(self.peaks_x1),
+                float(self.peaks_x2))
+            print("before peaks3")
+        else:
+            self.plotClearRaisedSignal.emit(True, True)
 
-#         x = self.pip.mass
-#         mask = [(x >= self.mass_x1) & (x <= self.mass_x2)]
-#         x = self.pip.mass[mask]
-#         y = self.pip.spectrum[mask]
-#         self.plotMassRaisedSignal.emit(
-#             self.shortname, x, y,
-#             float(self.ref_mass), float(self.cyclo_freq), float(self.mag_freq),
-#             bool(self.hold))
-#
-#         x = self.pip.mass[mask]
-#         y = self.pip.spectrum[mask]
-#         log.debug("Emit4")
-#         self.plotMassRaisedSignal.emit(
-#             self.shortname, y, x,
-#             float(self.ref_mass), bool(self.hold))
-#
-#         log.debug("Emit2")
-#         x = self.pip.mass[self.pip.mask]
-#         y = self.pip.spectrum[self.pip.mask]
-#         self.plotPeaksRaisedSignal.emit(
-#             self.shortname, y, x, self.pip.ind,
-#             float(self.mph), int(self.mpd), float(self.peaks_x1),
-#             float(self.peaks_x2))
 
 if __name__ == '__main__':
     pass

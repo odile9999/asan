@@ -32,6 +32,8 @@ class Dataset(object):
         self.mass = []
         self.spectrum = []
         self.headtext = ""
+        self.isCalibAvailable = False
+        self.datetime = ""
 
         self.__read_file()
 #         self.__find_limits()
@@ -42,24 +44,32 @@ class Dataset(object):
         """
         try:
             with open(self.filename, mode='rt', encoding='utf_8') as filer:
-                calibAvailable = False
+                self.isCalibAvailable = False
                 index = 0
                 for line in filer:
                     if line.strip():
                         if '|' not in line:
                             self.headtext += line
                             if '.mz' in line:
-                                calibAvailable = True
+                                self.isCalibAvailable = True
+                            if 'Date' in line:
+                                self.datetime = line.split('Date & Time:')[1].strip()
                         else:
-                            if calibAvailable:
+                            if self.isCalibAvailable:
                                 self.time.append(
                                     float(line.split('|')[0].strip()))
                                 self.mass.append(
                                     float(line.split('|')[1].strip()))
                                 self.spectrum.append(
                                     float(line.split('|')[2].strip()))
-                                index += 1
-            if not calibAvailable:
+                            else:
+                                self.time.append(
+                                    float(line.split('|')[0].strip()))
+                                self.spectrum.append(
+                                    float(line.split('|')[1].strip()))
+                            index += 1
+            if not self.isCalibAvailable:
+                self.headtext += "\nNO CALIBRATION FILE\n"
                 log.info("No calibration file for mass")
             self.points = index
             log.info("points %d", self.points)

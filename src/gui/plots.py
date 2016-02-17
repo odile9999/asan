@@ -71,6 +71,7 @@ class PlotsGUI(QTabWidget):
         self.ana.plotTimeRaisedSignal.connect(self.update_time)
         self.ana.plotMassRaisedSignal.connect(self.update_mass)
         self.ana.plotPeaksRaisedSignal.connect(self.update_peaks)
+        self.ana.plotClearRaisedSignal.connect(self.clear_plots)
 
     def update_time(self, shortname, x, y):
         title = shortname + " - time spectrum"
@@ -86,9 +87,18 @@ class PlotsGUI(QTabWidget):
         title = shortname + " - mass spectrum - " + \
             "(mph=" + str(mph) + ", mpd=" + str(mpd) + ")"
         x = mass
-        print("titile=", title)
         self.mpl_peaks.plot_peaks(
             x, y, xind, yind, title, "Mass (u)", "a.u.", x1, x2)
+
+    def clear_plots(self, mass, peaks):
+        if mass:
+            self.mpl_mass.hide()
+        else:
+            self.mpl_mass.show()
+        if peaks:
+            self.mpl_peaks.hide()
+        else:
+            self.mpl_peaks.show()
 
 
 class MatplotlibWidget(Canvas):

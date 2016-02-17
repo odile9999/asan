@@ -59,7 +59,8 @@ class MassTabViewerGUI(QDockWidget):
         self.mass_list = sorted(mass_list)
         text = "\n" + " " * 21
         for mass in self.mass_list:
-            text = text + str(mass).ljust(8)
+            text = text + (str(mass) + "_M").ljust(8) + \
+                (str(mass) + "_I").ljust(8)
         text = text + "\n" + "=" * 18
         self.ui.plainTextEdit_Viewer.appendPlainText(text)
 
@@ -85,10 +86,12 @@ class MassTabViewerGUI(QDockWidget):
         y = self.ana.pip.spectrum
         self.acc_event()
         p = Peaks()
-        dict_peak = p.masstab_peaks(x, y, self.mass_list, self.acc)
+        dict_m, dict_i = p.masstab_peaks(x, y, self.mass_list, self.acc)
         text = str(self.short_name).ljust(21)
         for mass in self.mass_list:
-            text = text + "{:.3f}".format(float(dict_peak[mass])).ljust(8)
+            text = text + \
+                "{:.3f}".format(float(dict_m[mass])).ljust(8) + \
+                "{:.0f}".format(float(dict_i[mass])).ljust(8)
         self.ui.plainTextEdit_Viewer.appendPlainText(text)
 
     def write_file(self):

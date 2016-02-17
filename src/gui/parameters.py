@@ -36,7 +36,7 @@ class ParametersGUI(QDockWidget):
     def fill_params(self, filename, pipeline):
         log.debug("event from %s", self.sender())
         shortname = str(filename).split(sep="\\")
-        self.ui.lineEdit_Date.setText(shortname[-1])
+        self.ui.lineEdit_File.setText(shortname[-1])
 
         self.pipeline = pipeline
         self.update_header()

@@ -36,11 +36,17 @@ class MassTabSelectorGUI(QDockWidget):
     def __connect_events(self):
         self.model = QStandardItemModel()
         self.mass_list = []
-        for i in range(20):
-            mass = 290 + i
+        for i in range(10):
+            mass = 184 + i
             self.mass_list.append(str(mass))
         for i in range(10):
-            mass = 599 + i
+            mass = 209 + i
+            self.mass_list.append(str(mass))
+        for i in range(10):
+            mass = 273.3 + i
+            self.mass_list.append(str(mass))
+        for i in range(10):
+            mass = 294 + i
             self.mass_list.append(str(mass))
         for mass in self.mass_list:
             item = QStandardItem(mass)

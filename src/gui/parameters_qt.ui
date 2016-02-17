@@ -32,12 +32,15 @@
    <string>Parameters</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
-   <widget class="QLineEdit" name="lineEdit_Date">
+   <widget class="QLineEdit" name="lineEdit_File">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>20</y>
-      <width>113</width>
+      <x>70</x>
+      <y>10</y>
+      <width>130</width>
       <height>20</height>
      </rect>
     </property>
@@ -45,26 +48,13 @@
      <number>32763</number>
     </property>
    </widget>
-   <widget class="QLabel" name="label_Date">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>0</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Date</string>
-    </property>
-   </widget>
    <widget class="QPlainTextEdit" name="plainTextEdit_Header">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
+      <y>40</y>
       <width>241</width>
-      <height>201</height>
+      <height>231</height>
      </rect>
     </property>
    </widget>
@@ -72,7 +62,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
+      <y>20</y>
       <width>47</width>
       <height>13</height>
      </rect>

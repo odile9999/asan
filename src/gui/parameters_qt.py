@@ -18,18 +18,16 @@ class Ui_DockWidget_Parameters(object):
         DockWidget_Parameters.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)
         self.dockWidgetContents = QtWidgets.QWidget()
         self.dockWidgetContents.setObjectName("dockWidgetContents")
-        self.lineEdit_Date = QtWidgets.QLineEdit(self.dockWidgetContents)
-        self.lineEdit_Date.setGeometry(QtCore.QRect(60, 20, 113, 20))
-        self.lineEdit_Date.setMaxLength(32763)
-        self.lineEdit_Date.setObjectName("lineEdit_Date")
-        self.label_Date = QtWidgets.QLabel(self.dockWidgetContents)
-        self.label_Date.setGeometry(QtCore.QRect(60, 0, 47, 13))
-        self.label_Date.setObjectName("label_Date")
+        self.lineEdit_File = QtWidgets.QLineEdit(self.dockWidgetContents)
+        self.lineEdit_File.setEnabled(False)
+        self.lineEdit_File.setGeometry(QtCore.QRect(70, 10, 130, 20))
+        self.lineEdit_File.setMaxLength(32763)
+        self.lineEdit_File.setObjectName("lineEdit_File")
         self.plainTextEdit_Header = QtWidgets.QPlainTextEdit(self.dockWidgetContents)
-        self.plainTextEdit_Header.setGeometry(QtCore.QRect(10, 60, 241, 201))
+        self.plainTextEdit_Header.setGeometry(QtCore.QRect(10, 40, 241, 231))
         self.plainTextEdit_Header.setObjectName("plainTextEdit_Header")
         self.label_Header = QtWidgets.QLabel(self.dockWidgetContents)
-        self.label_Header.setGeometry(QtCore.QRect(10, 40, 47, 13))
+        self.label_Header.setGeometry(QtCore.QRect(10, 20, 47, 13))
         self.label_Header.setObjectName("label_Header")
         DockWidget_Parameters.setWidget(self.dockWidgetContents)
 
@@ -39,6 +37,5 @@ class Ui_DockWidget_Parameters(object):
     def retranslateUi(self, DockWidget_Parameters):
         _translate = QtCore.QCoreApplication.translate
         DockWidget_Parameters.setWindowTitle(_translate("DockWidget_Parameters", "Parameters"))
-        self.label_Date.setText(_translate("DockWidget_Parameters", "Date"))
         self.label_Header.setText(_translate("DockWidget_Parameters", "Header"))
 

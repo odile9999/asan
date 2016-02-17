@@ -31,12 +31,14 @@ class Pipeline(object):
     def __process_file(self):
         """ operations on files """
         data = Dataset(self.filename)
-        if data.points > 0:
-            self.spectrum = data.spectrum
-            self.time = data.time
-            self.mass = data.mass
-            self.points = data.points
+        self.points = data.points
         self.headtext = data.headtext
+        self.spectrum = data.spectrum
+        self.time = data.time
+        self.datetime = data.datetime
+        self.isCalibAvailable = data.isCalibAvailable
+        if len(data.mass) > 0:
+            self.mass = data.mass
 
     def process_peaks(self, mph=0.0, mpd=0, x1=0.0, x2=0.0):
         log.info("enter")
