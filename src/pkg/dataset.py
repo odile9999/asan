@@ -72,7 +72,7 @@ class Dataset(object):
                 self.headtext += "\nNO CALIBRATION FILE\n"
                 log.info("No calibration file for mass")
             self.points = index
-            log.info("points %d", self.points)
+            log.debug("points %d", self.points)
 
         except (IOError) as error:
             log.error("Unable to open : %s", error)

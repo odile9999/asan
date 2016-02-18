@@ -209,7 +209,6 @@ class Peaks(object):
         return res_m, res_i
 
     def get_peaks(self, x, y, startx, endx, mph_in=0.0, mpd_in=0):
-        log.info("enter")
         ref = startx + (abs(endx - startx) / 2)
         delta = 1.0
         mph_o, mpd_o, mask = self.prepare_detect(

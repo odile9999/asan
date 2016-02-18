@@ -82,8 +82,8 @@ class MassTabViewerGUI(QDockWidget):
             return
         #         if self.ana.pip.signal is None:
         #             return
-        x = self.ana.pip.mass
-        y = self.ana.pip.spectrum
+        x = self.ana.pip.data.mass
+        y = self.ana.pip.data.spectrum
         self.acc_event()
         p = Peaks()
         dict_m, dict_i = p.masstab_peaks(x, y, self.mass_list, self.acc)
@@ -97,12 +97,14 @@ class MassTabViewerGUI(QDockWidget):
     def write_file(self):
         log.debug("event from %s", self.sender())
         #         if self.dir_name:
-        filename = QFileDialog.getSaveFileName(
-            self, 'MassTab File', self.dir_name, filter='masstab*.txt')
-        if filename:
-            with open(filename, mode="w", encoding='utf_8') as file:
+        try:
+            answer = QFileDialog.getSaveFileName(self, 'MassTab File', self.dir_name)
+            filename = os.path.abspath(answer[0])
+            log.debug("Written file %s...", filename)
+            with open(filename, mode='w', encoding='utf_8') as file:
                 file.write(self.ui.plainTextEdit_Viewer.toPlainText())
-
+        except (IOError) as error:
+            log.error("Unable to open : %s", error)
 
 if __name__ == '__main__':
     pass

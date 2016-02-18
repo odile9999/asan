@@ -78,7 +78,6 @@ class PlotsGUI(QTabWidget):
         self.mpl_spec.plot_data(x, y, title, "Time (ns)", "a.u.")
 
     def update_mass(self, shortname, mass, y, hold):
-        log.info("update_mass")
         title = shortname + " - mass spectrum"
         x = mass
         self.mpl_mass.plot_mass(x, y, title, "Mass (u)", "a.u.", hold)

@@ -88,10 +88,9 @@ class AnalysisGUI(QDockWidget):
         self.shortname = shortname[-1]
         self.ui.lineEdit_File.setText(self.shortname)
 
-        log.info("PIPELINE started...")
         self.pip = Pipeline(filename)
 
-        self.shortname = self.pip.datetime + " - " + self.shortname
+        self.shortname = self.pip.data.datetime + " - " + self.shortname
 
         # Update parameters box
         self.parametersRaisedSignal.emit(filename, self.pip)
@@ -106,13 +105,11 @@ class AnalysisGUI(QDockWidget):
     def emit_plot_signals(self):
         log.debug("event from %s", self.sender())
         # Update plot for time
-        x = self.pip.time
-        y = self.pip.spectrum
+        x = self.pip.data.time
+        y = self.pip.data.spectrum
         self.plotTimeRaisedSignal.emit(self.shortname, x, y)
 
-        print("OK after time plot")
-
-        if self.pip.isCalibAvailable:
+        if self.pip.data.isCalibAvailable:
             self.plotClearRaisedSignal.emit(False, False)
             # Update plot for mass
             x, y = self.pip.get_x1_x2_mass(self.mass_x1, self.mass_x2)
@@ -125,15 +122,11 @@ class AnalysisGUI(QDockWidget):
             self.ui.spinBox_PeakDistanceFound.setValue(mpd)
             self.ui.doubleSpinBox_PeakHeightFound.setValue(mph)
             # Update plot for peaks
-            print("before peaks")
-
             x, y, xind, yind = self.pip.get_mask_peaks()
-            print("before peaks2", xind, yind)
             self.plotPeaksRaisedSignal.emit(
                 self.shortname, x, y, xind, yind,
                 float(self.mph), int(self.mpd), float(self.peaks_x1),
                 float(self.peaks_x2))
-            print("before peaks3")
         else:
             self.plotClearRaisedSignal.emit(True, True)
 

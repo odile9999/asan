@@ -38,13 +38,12 @@ class ParametersGUI(QDockWidget):
         shortname = str(filename).split(sep="\\")
         self.ui.lineEdit_File.setText(shortname[-1])
 
-        self.pipeline = pipeline
+        self.pip = pipeline
         self.update_header()
 
     def update_header(self):
         #         self.ui.plainTextEdit_Header.clear()
-        self.ui.plainTextEdit_Header.setPlainText(self.pipeline.headtext)
-        log.info("END of parameters...")
+        self.ui.plainTextEdit_Header.setPlainText(self.pip.data.headtext)
 
 if __name__ == '__main__':
     pass

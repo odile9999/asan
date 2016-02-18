@@ -30,21 +30,18 @@ class Pipeline(object):
 
     def __process_file(self):
         """ operations on files """
-        data = Dataset(self.filename)
-        self.points = data.points
-        self.headtext = data.headtext
-        self.spectrum = data.spectrum
-        self.time = data.time
-        self.datetime = data.datetime
-        self.isCalibAvailable = data.isCalibAvailable
-        if len(data.mass) > 0:
-            self.mass = data.mass
+        self.data = Dataset(self.filename)
 
     def process_peaks(self, mph=0.0, mpd=0, x1=0.0, x2=0.0):
-        log.info("enter")
+        """
+        Within a range of mass [x1, x2], get indices of maximum intensity (ind)
+        with a peak height and a peak distance provided as input params (mph, mpd)
+        suggested values are returned into mph_o, mpd_o, if needed
+        ==> caution ! indices are from x[mask], not full x array
+        """
 
-        x = np.asarray(self.mass)
-        y = np.asarray(self.spectrum)
+        x = np.asarray(self.data.mass)
+        y = np.asarray(self.data.spectrum)
 
         p = Peaks()
 
@@ -57,17 +54,16 @@ class Pipeline(object):
 
     def get_x1_x2_mass(self, mass_x1, mass_x2):
 
-        x = np.asarray(self.mass)
-        y = np.asarray(self.spectrum)
+        x = np.asarray(self.data.mass)
+        y = np.asarray(self.data.spectrum)
         mask = [(x >= mass_x1) & (x <= mass_x2)]
-#         print("xmask, ymask", x[mask], y[mask])
+
         return x[mask], y[mask]
 
     def get_mask_peaks(self):
-        log.info("enter")
 
-        x = np.asarray(self.mass)
-        y = np.asarray(self.spectrum)
+        x = np.asarray(self.data.mass)
+        y = np.asarray(self.data.spectrum)
         xx = x[self.mask]
         yy = y[self.mask]
 
