@@ -11,7 +11,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
 from pkg.logs import Logs
-log = Logs('root').setup_logger("debug")
+log = Logs('root').setup_logger("info")
 # import MUST be after declaration of log
 from gui.main_window_qt import Ui_MainWindow
 
