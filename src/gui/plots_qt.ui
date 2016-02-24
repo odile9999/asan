@@ -32,23 +32,29 @@
    <string>TabWidget</string>
   </property>
   <property name="currentIndex">
-   <number>0</number>
+   <number>3</number>
   </property>
-  <widget class="QWidget" name="tab_Spectrum">
+  <widget class="QWidget" name="tab_Time">
    <attribute name="title">
     <string>Time</string>
    </attribute>
-   <layout class="QVBoxLayout" name="verticalLayout_2"/>
+   <layout class="QVBoxLayout" name="verticalLayout_1"/>
   </widget>
   <widget class="QWidget" name="tab_Mass">
    <attribute name="title">
     <string>Mass</string>
    </attribute>
-   <layout class="QVBoxLayout" name="verticalLayout_3"/>
+   <layout class="QVBoxLayout" name="verticalLayout_2"/>
   </widget>
   <widget class="QWidget" name="tab_Peaks">
    <attribute name="title">
     <string>Peaks</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_3"/>
+  </widget>
+  <widget class="QWidget" name="tab_Calib">
+   <attribute name="title">
+    <string>Calib</string>
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout_4"/>
   </widget>

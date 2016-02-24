@@ -33,7 +33,9 @@ class Dataset(object):
         self.spectrum = []
         self.headtext = ""
         self.isCalibAvailable = False
+        self.isCalibDone = False
         self.datetime = ""
+        self.coefs = []
 
         self.__read_file()
 #         self.__find_limits()
@@ -45,6 +47,7 @@ class Dataset(object):
         try:
             with open(self.filename, mode='rt', encoding='utf_8') as filer:
                 self.isCalibAvailable = False
+                self.isCalibDone = False
                 index = 0
                 for line in filer:
                     if line.strip():
@@ -79,6 +82,9 @@ class Dataset(object):
         except (struct.error) as error:
             log.error("Not a valid binary file : %s", error)
 
+    def update_mass(self, calib_mass):
+        self.mass = calib_mass
+        self.isCalibDone = True
 
 if __name__ == '__main__':
 

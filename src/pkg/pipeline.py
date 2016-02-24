@@ -32,7 +32,30 @@ class Pipeline(object):
         """ operations on files """
         self.data = Dataset(self.filename)
 
-    def process_peaks(self, mph=0.0, mpd=0, x1=0.0, x2=0.0):
+    def find_calib(self, time_list, mass_list):
+        self.time_list = time_list
+        self.mass_list = mass_list
+        print("time_list= ", time_list)
+        print("mass_list= ", mass_list)
+        # ordre du polynome 2 : ax2 + bx + c
+        # si ordre 3 donne de meilleurs résultats
+        coefs, stats = np.polynomial.polynomial.polyfit(time_list, mass_list, 3, full=True)
+        print("coefs =", coefs, len(coefs))
+        print("stats = si faible OK", stats)
+    #     ffit = np.polynomial.polynomial.Polynomial(coefs)
+    #     print("ffit", type(ffit))
+        return coefs
+
+    def calib_mass(self, coefs):
+        print("cali_mass ENTER")
+        mass = np.polynomial.polynomial.polyval(self.data.time, coefs)
+        self.data.update_mass(mass)
+        print("cali_mass, isCalibDone", self.data.isCalibDone)
+#     plt.plot(y, x, 'o', ffit, x_new)
+#     # courbe de masse calibrée
+#     plt.plot(ffit, y_new)
+
+    def process_peaks(self, xin, yin, mph=0.0, mpd=0, x1=0.0, x2=0.0):
         """
         Within a range of mass [x1, x2], get indices of maximum intensity (ind)
         with a peak height and a peak distance provided as input params (mph, mpd)
@@ -40,35 +63,25 @@ class Pipeline(object):
         ==> caution ! indices are from x[mask], not full x array
         """
 
-        x = np.asarray(self.data.mass)
-        y = np.asarray(self.data.spectrum)
+        x = np.asarray(xin)
+        y = np.asarray(yin)
 
         p = Peaks()
 
         mph_o, mpd_o, mask, ind = p.get_peaks(x, y, x1, x2, mph, mpd)
 
-        self.mask = mask
-        self.ind = ind
+        xx = x[mask]
+        yy = y[mask]
 
-        return mph_o, mpd_o
+        return mph_o, mpd_o, xx, yy, xx[ind], yy[ind]
 
-    def get_x1_x2_mass(self, mass_x1, mass_x2):
+    def get_x1_x2_mass(self, xin, yin, mass_x1, mass_x2):
 
-        x = np.asarray(self.data.mass)
-        y = np.asarray(self.data.spectrum)
+        x = np.asarray(xin)
+        y = np.asarray(yin)
         mask = [(x >= mass_x1) & (x <= mass_x2)]
 
         return x[mask], y[mask]
-
-    def get_mask_peaks(self):
-
-        x = np.asarray(self.data.mass)
-        y = np.asarray(self.data.spectrum)
-        xx = x[self.mask]
-        yy = y[self.mask]
-
-        return xx, yy, xx[self.ind], yy[self.ind]
-
 
 if __name__ == '__main__':
 

@@ -44,25 +44,32 @@ class PlotsGUI(QTabWidget):
 
     def __setup_plots(self):
         # Time spectrum
-        self.mpl_spec = MatplotlibWidget(
+        self.mpl_time = MatplotlibWidget(
             title='Time', xlabel='n/a', ylabel='n/a', dpi=70)
-        self.mpl_spec.setObjectName("matplotlibwidget_Spectrum")
-        self.ui.verticalLayout_2.addWidget(self.mpl_spec)
-        navigation = NavigationToolbar(self.mpl_spec, self)
-        self.ui.verticalLayout_2.addWidget(navigation)
+        self.mpl_time.setObjectName("matplotlibwidget_Time")
+        self.ui.verticalLayout_1.addWidget(self.mpl_time)
+        navigation = NavigationToolbar(self.mpl_time, self)
+        self.ui.verticalLayout_1.addWidget(navigation)
         # Mass spectrum
         self.mpl_mass = MatplotlibWidget(
             title='Mass', xlabel='n/a', ylabel='n/a', dpi=70)
         self.mpl_mass.setObjectName("matplotlibwidget_Mass")
-        self.ui.verticalLayout_3.addWidget(self.mpl_mass)
+        self.ui.verticalLayout_2.addWidget(self.mpl_mass)
         navigation = NavigationToolbar(self.mpl_mass, self)
-        self.ui.verticalLayout_3.addWidget(navigation)
-        # Peaks spectrum
+        self.ui.verticalLayout_2.addWidget(navigation)
+        # Peaks
         self.mpl_peaks = MatplotlibWidget(
             title='Peaks', xlabel='n/a', ylabel='n/a', dpi=70)
         self.mpl_peaks.setObjectName("matplotlibwidget_Peaks")
-        self.ui.verticalLayout_4.addWidget(self.mpl_peaks)
+        self.ui.verticalLayout_3.addWidget(self.mpl_peaks)
         navigation = NavigationToolbar(self.mpl_peaks, self)
+        self.ui.verticalLayout_3.addWidget(navigation)
+        # Calib
+        self.mpl_calib = MatplotlibWidget(
+            title='Calibration', xlabel='n/a', ylabel='n/a', dpi=70)
+        self.mpl_calib.setObjectName("matplotlibwidget_Calib")
+        self.ui.verticalLayout_4.addWidget(self.mpl_calib)
+        navigation = NavigationToolbar(self.mpl_calib, self)
         self.ui.verticalLayout_4.addWidget(navigation)
         # default tab = signal
         self.setCurrentIndex(0)
@@ -71,25 +78,34 @@ class PlotsGUI(QTabWidget):
         self.ana.plotTimeRaisedSignal.connect(self.update_time)
         self.ana.plotMassRaisedSignal.connect(self.update_mass)
         self.ana.plotPeaksRaisedSignal.connect(self.update_peaks)
+        self.ana.plotCalibRaisedSignal.connect(self.update_calib)
         self.ana.plotClearRaisedSignal.connect(self.clear_plots)
 
     def update_time(self, shortname, x, y):
+        log.debug("event from %s", self.sender())
         title = shortname + " - time spectrum"
-        self.mpl_spec.plot_data(x, y, title, "Time (ns)", "a.u.")
+        self.mpl_time.plot_data(x, y, title, "Time (ns)", "Intensity (a.u.)")
 
     def update_mass(self, shortname, mass, y, hold):
+        log.debug("event from %s", self.sender())
         title = shortname + " - mass spectrum"
         x = mass
-        self.mpl_mass.plot_mass(x, y, title, "Mass (u)", "a.u.", hold)
+        self.mpl_mass.plot_mass(x, y, title, "m/z", "Intensity (a.u.)", hold)
 
     def update_peaks(self, shortname, mass, y, xind, yind, mph, mpd, x1, x2):
+        log.debug("event from %s", self.sender())
         title = shortname + " - mass spectrum - " + \
             "(mph=" + str(mph) + ", mpd=" + str(mpd) + ")"
         x = mass
         self.mpl_peaks.plot_peaks(
-            x, y, xind, yind, title, "Mass (u)", "a.u.", x1, x2)
+            x, y, xind, yind, title, "m/z", "Intensity (a.u.)", x1, x2)
 
-    def clear_plots(self, mass, peaks):
+    def update_calib(self, shortname, mass_list, time_list, calib_mass, time):
+        log.debug("event from %s", self.sender())
+        title = shortname + "Calibration curve"
+        self.mpl_calib.plot_calib(mass_list, time_list, calib_mass, time, title, "m/z", "Time (ns)")
+
+    def clear_plots(self, mass, peaks, calib):
         if mass:
             self.mpl_mass.hide()
         else:
@@ -98,6 +114,10 @@ class PlotsGUI(QTabWidget):
             self.mpl_peaks.hide()
         else:
             self.mpl_peaks.show()
+        if calib:
+            self.mpl_calib.hide()
+        else:
+            self.mpl_calib.show()
 
 
 class MatplotlibWidget(Canvas):
@@ -125,6 +145,14 @@ class MatplotlibWidget(Canvas):
     def plot_mass(self, x, y, title, xlabel, ylabel, hold=False):
         self.ax.hold(hold)
         self.ax.plot(x, y)
+        self.ax.set_title(title, size=10)
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(ylabel)
+        self.draw()
+
+    def plot_calib(self, mass_list, time_list, calib_mass, time, title, xlabel, ylabel, hold=False):
+        self.ax.hold(hold)
+        self.ax.plot(mass_list, time_list, 'o', calib_mass, time)
         self.ax.set_title(title, size=10)
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)

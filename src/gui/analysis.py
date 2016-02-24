@@ -25,9 +25,10 @@ class AnalysisGUI(QDockWidget):
     masstabRaisedSignal = pyqtSignal(str, object)
     plotTimeRaisedSignal = pyqtSignal(object, object, object)
     plotMassRaisedSignal = pyqtSignal(object, object, object, bool)
+    plotCalibRaisedSignal = pyqtSignal(object, object, object, object, object)
     plotPeaksRaisedSignal = pyqtSignal(
         object, object, object, object, object, float, int, float, float)
-    plotClearRaisedSignal = pyqtSignal(bool, bool)
+    plotClearRaisedSignal = pyqtSignal(bool, bool, bool)
 
     def __init__(self, parent=None):
         """
@@ -81,6 +82,10 @@ class AnalysisGUI(QDockWidget):
         self.ui.spinBox_PeakDistance.setValue(50)
         self.ui.doubleSpinBox_StartMass.setValue(290.0)
         self.ui.doubleSpinBox_EndMass.setValue(310.0)
+        self.isCalibFound = False
+        self.coefs = None
+        self.mass_list = []
+        self.time_list = []
 
     def new_analysis(self, filename):
         log.info("analysis of %s", filename)
@@ -104,32 +109,63 @@ class AnalysisGUI(QDockWidget):
 
     def emit_plot_signals(self):
         log.debug("event from %s", self.sender())
+        self.emit_plot_time()
+
+        # if calib is there, always use mass columns from file
+        if self.pip.data.isCalibAvailable:
+            print("isCalibAvailable")
+            self.isCalibFound = False
+            self.plotClearRaisedSignal.emit(False, False, True)
+            self.emit_plot_mass_peaks()
+        else:
+            print("NOT isCalibAvailable")
+            if self.isCalibFound:
+                print("isCalibFound", self.coefs)
+                self.pip.calib_mass(self.coefs)
+                self.plotClearRaisedSignal.emit(False, False, False)
+                self.emit_plot_mass_peaks()
+                self.emit_plot_calib()
+            else:
+                print("found, done 6", self.pip.data.isCalibDone)
+                self.plotClearRaisedSignal.emit(True, True, True)
+                print("AFTER CLEAR")
+
+    def emit_plot_time(self):
         # Update plot for time
         x = self.pip.data.time
         y = self.pip.data.spectrum
         self.plotTimeRaisedSignal.emit(self.shortname, x, y)
 
-        if self.pip.data.isCalibAvailable:
-            self.plotClearRaisedSignal.emit(False, False)
-            # Update plot for mass
-            x, y = self.pip.get_x1_x2_mass(self.mass_x1, self.mass_x2)
-            self.plotMassRaisedSignal.emit(
-                self.shortname, x, y, bool(self.hold))
+    def emit_plot_mass_peaks(self):
 
-            # Process peaks with last input values
-            mph, mpd = self.pip.process_peaks(
-                self.mph, self.mpd, self.peaks_x1, self.peaks_x2)
-            self.ui.spinBox_PeakDistanceFound.setValue(mpd)
-            self.ui.doubleSpinBox_PeakHeightFound.setValue(mph)
-            # Update plot for peaks
-            x, y, xind, yind = self.pip.get_mask_peaks()
-            self.plotPeaksRaisedSignal.emit(
-                self.shortname, x, y, xind, yind,
-                float(self.mph), int(self.mpd), float(self.peaks_x1),
-                float(self.peaks_x2))
-        else:
-            self.plotClearRaisedSignal.emit(True, True)
+        # Update plot for mass
+        x = self.pip.data.mass
+        y = self.pip.data.spectrum
+        xmask, ymask = self.pip.get_x1_x2_mass(x, y, self.mass_x1, self.mass_x2)
+        self.plotMassRaisedSignal.emit(
+            self.shortname, xmask, ymask, bool(self.hold))
+        print("end of plot_mass")
+        # Process peaks with last input values
+        mph, mpd, x, y, xind, yind = self.pip.process_peaks(x, y, self.mph, self.mpd,
+                                                            self.peaks_x1, self.peaks_x2)
+        self.ui.spinBox_PeakDistanceFound.setValue(mpd)
+        self.ui.doubleSpinBox_PeakHeightFound.setValue(mph)
+        # Update plot for peaks
+        self.plotPeaksRaisedSignal.emit(
+            self.shortname, x, y, xind, yind,
+            float(self.mph), int(self.mpd), float(self.peaks_x1),
+            float(self.peaks_x2))
+        print("end of emit_plot_mass_peaks")
 
+    def emit_plot_calib(self):
+        #         log.debug("event from %s", self.sender())
+        x = self.pip.data.mass
+        y = self.pip.data.time
+        print("ENTER emit_plot_calib", self.mass_list, self.time_list)
+        print("OK OK")
+        self.plotCalibRaisedSignal.emit(
+            self.shortname, self.mass_list, self.time_list, x, y)
+        print("after emit_plot_calib")
 
 if __name__ == '__main__':
     pass

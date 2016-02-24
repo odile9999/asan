@@ -223,14 +223,12 @@ class Peaks(object):
         else:
             mpd = mpd_o
 
-        xx = np.asarray(x)
         yy = np.asarray(y)
         # Detect peak on rising edge
         edge = 'rising'
         # Detect peak greater than threshold
         threshold = 0.0
         y = yy[mask]
-        x = xx[mask]
         ind = self.detect_peaks(y, mph, mpd, threshold, edge)
 #         print("here is mph mpd:", mph, mpd, ind, x[ind], y[ind])
 #         print("here is mpho mpdo:", mph_o, mpd_o, ind)
