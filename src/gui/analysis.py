@@ -113,22 +113,17 @@ class AnalysisGUI(QDockWidget):
 
         # if calib is there, always use mass columns from file
         if self.pip.data.isCalibAvailable:
-            print("isCalibAvailable")
             self.isCalibFound = False
             self.plotClearRaisedSignal.emit(False, False, True)
             self.emit_plot_mass_peaks()
         else:
-            print("NOT isCalibAvailable")
             if self.isCalibFound:
-                print("isCalibFound", self.coefs)
                 self.pip.calib_mass(self.coefs)
                 self.plotClearRaisedSignal.emit(False, False, False)
                 self.emit_plot_mass_peaks()
                 self.emit_plot_calib()
             else:
-                print("found, done 6", self.pip.data.isCalibDone)
                 self.plotClearRaisedSignal.emit(True, True, True)
-                print("AFTER CLEAR")
 
     def emit_plot_time(self):
         # Update plot for time
@@ -144,7 +139,6 @@ class AnalysisGUI(QDockWidget):
         xmask, ymask = self.pip.get_x1_x2_mass(x, y, self.mass_x1, self.mass_x2)
         self.plotMassRaisedSignal.emit(
             self.shortname, xmask, ymask, bool(self.hold))
-        print("end of plot_mass")
         # Process peaks with last input values
         mph, mpd, x, y, xind, yind = self.pip.process_peaks(x, y, self.mph, self.mpd,
                                                             self.peaks_x1, self.peaks_x2)
@@ -155,17 +149,13 @@ class AnalysisGUI(QDockWidget):
             self.shortname, x, y, xind, yind,
             float(self.mph), int(self.mpd), float(self.peaks_x1),
             float(self.peaks_x2))
-        print("end of emit_plot_mass_peaks")
 
     def emit_plot_calib(self):
         #         log.debug("event from %s", self.sender())
         x = self.pip.data.mass
         y = self.pip.data.time
-        print("ENTER emit_plot_calib", self.mass_list, self.time_list)
-        print("OK OK")
         self.plotCalibRaisedSignal.emit(
             self.shortname, self.mass_list, self.time_list, x, y)
-        print("after emit_plot_calib")
 
 if __name__ == '__main__':
     pass

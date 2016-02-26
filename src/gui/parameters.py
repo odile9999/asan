@@ -81,7 +81,6 @@ class ParametersGUI(QDockWidget):
             self.ana.isCalibFound = False
         self.ana.time_list = self.time_list
         self.ana.mass_list = self.mass_list
-        print("self ana calib 2", self.ana.isCalibFound)
 
 if __name__ == '__main__':
     pass

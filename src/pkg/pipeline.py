@@ -33,24 +33,18 @@ class Pipeline(object):
         self.data = Dataset(self.filename)
 
     def find_calib(self, time_list, mass_list):
-        self.time_list = time_list
-        self.mass_list = mass_list
-        print("time_list= ", time_list)
-        print("mass_list= ", mass_list)
         # ordre du polynome 2 : ax2 + bx + c
         # si ordre 3 donne de meilleurs résultats
         coefs, stats = np.polynomial.polynomial.polyfit(time_list, mass_list, 3, full=True)
-        print("coefs =", coefs, len(coefs))
-        print("stats = si faible OK", stats)
+        log.info("Polynomial coefs %s", coefs)
+#         print("stats = si faible OK", stats)
     #     ffit = np.polynomial.polynomial.Polynomial(coefs)
     #     print("ffit", type(ffit))
         return coefs
 
     def calib_mass(self, coefs):
-        print("cali_mass ENTER")
         mass = np.polynomial.polynomial.polyval(self.data.time, coefs)
         self.data.update_mass(mass)
-        print("cali_mass, isCalibDone", self.data.isCalibDone)
 #     plt.plot(y, x, 'o', ffit, x_new)
 #     # courbe de masse calibrée
 #     plt.plot(ffit, y_new)

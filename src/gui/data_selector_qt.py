@@ -11,9 +11,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_DockWidget_DataSelector(object):
     def setupUi(self, DockWidget_DataSelector):
         DockWidget_DataSelector.setObjectName("DockWidget_DataSelector")
-        DockWidget_DataSelector.resize(260, 200)
-        DockWidget_DataSelector.setMinimumSize(QtCore.QSize(260, 200))
-        DockWidget_DataSelector.setMaximumSize(QtCore.QSize(260, 200))
+        DockWidget_DataSelector.resize(300, 200)
+        DockWidget_DataSelector.setMinimumSize(QtCore.QSize(300, 200))
+        DockWidget_DataSelector.setMaximumSize(QtCore.QSize(300, 200))
         DockWidget_DataSelector.setFeatures(QtWidgets.QDockWidget.DockWidgetFloatable|QtWidgets.QDockWidget.DockWidgetMovable)
         DockWidget_DataSelector.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)
         self.dockWidgetContents = QtWidgets.QWidget()
@@ -42,9 +42,9 @@ class Ui_DockWidget_DataSelector(object):
         self.pushButton_StartAnalysis.setGeometry(QtCore.QRect(10, 150, 130, 23))
         self.pushButton_StartAnalysis.setObjectName("pushButton_StartAnalysis")
         self.lineEdit_Folder = QtWidgets.QLineEdit(self.dockWidgetContents)
-        self.lineEdit_Folder.setGeometry(QtCore.QRect(70, 6, 180, 20))
+        self.lineEdit_Folder.setGeometry(QtCore.QRect(70, 6, 221, 20))
         self.lineEdit_Folder.setMinimumSize(QtCore.QSize(100, 0))
-        self.lineEdit_Folder.setMaximumSize(QtCore.QSize(180, 16777215))
+        self.lineEdit_Folder.setMaximumSize(QtCore.QSize(250, 16777215))
         self.lineEdit_Folder.setReadOnly(False)
         self.lineEdit_Folder.setObjectName("lineEdit_Folder")
         self.comboBox_Day = QtWidgets.QComboBox(self.dockWidgetContents)
@@ -92,7 +92,7 @@ class Ui_DockWidget_DataSelector(object):
         self.label_Month.setText(_translate("DockWidget_DataSelector", "Month"))
         self.label_Day.setText(_translate("DockWidget_DataSelector", "Day"))
         self.pushButton_StartAnalysis.setText(_translate("DockWidget_DataSelector", "Start Analysis"))
-        self.lineEdit_Folder.setText(_translate("DockWidget_DataSelector", "G:\\HASSAN\\Aroma\\Spectra\\"))
+        self.lineEdit_Folder.setText(_translate("DockWidget_DataSelector", "C:\\Users\\Hassan Sabbah\\Desktop\\Aroma\\Spectra\\"))
         self.label_Exp.setText(_translate("DockWidget_DataSelector", "Experiment"))
         self.label_Number.setText(_translate("DockWidget_DataSelector", "Number"))
 

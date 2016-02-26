@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
+    <width>300</width>
     <height>200</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>260</width>
+    <width>300</width>
     <height>200</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>260</width>
+    <width>300</width>
     <height>200</height>
    </size>
   </property>
@@ -150,7 +150,7 @@
      <rect>
       <x>70</x>
       <y>6</y>
-      <width>180</width>
+      <width>221</width>
       <height>20</height>
      </rect>
     </property>
@@ -162,12 +162,12 @@
     </property>
     <property name="maximumSize">
      <size>
-      <width>180</width>
+      <width>250</width>
       <height>16777215</height>
      </size>
     </property>
     <property name="text">
-     <string>G:\HASSAN\Aroma\Spectra\</string>
+     <string>C:\Users\Hassan Sabbah\Desktop\Aroma\Spectra\</string>
     </property>
     <property name="readOnly">
      <bool>false</bool>
