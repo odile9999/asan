@@ -21,8 +21,8 @@ class AnalysisGUI(QDockWidget):
     """
     classdocs
     """
-    parametersRaisedSignal = pyqtSignal(str, object)
-    masstabRaisedSignal = pyqtSignal(str, object)
+    parametersRaisedSignal = pyqtSignal(object)
+    masstabRaisedSignal = pyqtSignal(object)
     plotTimeRaisedSignal = pyqtSignal(object, object, object)
     plotMassRaisedSignal = pyqtSignal(object, object, object, bool)
     plotCalibRaisedSignal = pyqtSignal(object, object, object, object, object)
@@ -82,25 +82,25 @@ class AnalysisGUI(QDockWidget):
         self.ui.spinBox_PeakDistance.setValue(50)
         self.ui.doubleSpinBox_StartMass.setValue(290.0)
         self.ui.doubleSpinBox_EndMass.setValue(310.0)
-        self.isCalibFound = False
         self.coefs = None
         self.mass_list = []
         self.time_list = []
+        self.calib_name = ""
+        self.mmass_name = ""
 
-    def new_analysis(self, filename):
-        log.info("analysis of %s", filename)
-        shortname = str(filename).split(sep="\\")
-        self.shortname = shortname[-1]
-        self.ui.lineEdit_File.setText(self.shortname)
+    def new_analysis(self, spectrum_name):
+        log.info("analysis of %s", spectrum_name)
+        # Ex : f:\hassan\Aroma\Spectra\XXX.txt
+        self.filename = spectrum_name
 
-        self.pip = Pipeline(filename)
+        self.pip = Pipeline(spectrum_name)
 
-        self.shortname = self.pip.data.datetime + " - " + self.shortname
+        self.ui.lineEdit_File.setText(self.pip.shortname)
 
         # Update parameters box
-        self.parametersRaisedSignal.emit(filename, self.pip)
+        self.parametersRaisedSignal.emit(self.pip)
         # Update masstab_viewer box
-        self.masstabRaisedSignal.emit(filename, self.pip)
+        self.masstabRaisedSignal.emit(self.pip)
         # Update plots with user input values
         self.ui.pushButton_UpdatePlots.setEnabled(True)
         self.mass_event()
@@ -113,12 +113,10 @@ class AnalysisGUI(QDockWidget):
 
         # if calib is there, always use mass columns from file
         if self.pip.data.isCalibAvailable:
-            self.isCalibFound = False
             self.plotClearRaisedSignal.emit(False, False, True)
             self.emit_plot_mass_peaks()
         else:
-            if self.isCalibFound:
-                self.pip.calib_mass(self.coefs)
+            if self.pip.isCalibFound:
                 self.plotClearRaisedSignal.emit(False, False, False)
                 self.emit_plot_mass_peaks()
                 self.emit_plot_calib()
@@ -129,7 +127,7 @@ class AnalysisGUI(QDockWidget):
         # Update plot for time
         x = self.pip.data.time
         y = self.pip.data.spectrum
-        self.plotTimeRaisedSignal.emit(self.shortname, x, y)
+        self.plotTimeRaisedSignal.emit(self.pip.plot_filename, x, y)
 
     def emit_plot_mass_peaks(self):
 
@@ -138,7 +136,7 @@ class AnalysisGUI(QDockWidget):
         y = self.pip.data.spectrum
         xmask, ymask = self.pip.get_x1_x2_mass(x, y, self.mass_x1, self.mass_x2)
         self.plotMassRaisedSignal.emit(
-            self.shortname, xmask, ymask, bool(self.hold))
+            self.pip.plot_filename, xmask, ymask, bool(self.hold))
         # Process peaks with last input values
         mph, mpd, x, y, xind, yind = self.pip.process_peaks(x, y, self.mph, self.mpd,
                                                             self.peaks_x1, self.peaks_x2)
@@ -146,7 +144,7 @@ class AnalysisGUI(QDockWidget):
         self.ui.doubleSpinBox_PeakHeightFound.setValue(mph)
         # Update plot for peaks
         self.plotPeaksRaisedSignal.emit(
-            self.shortname, x, y, xind, yind,
+            self.pip.plot_filename, x, y, xind, yind,
             float(self.mph), int(self.mpd), float(self.peaks_x1),
             float(self.peaks_x2))
 
@@ -155,7 +153,7 @@ class AnalysisGUI(QDockWidget):
         x = self.pip.data.mass
         y = self.pip.data.time
         self.plotCalibRaisedSignal.emit(
-            self.shortname, self.mass_list, self.time_list, x, y)
+            self.pip.plot_filename, self.mass_list, self.time_list, x, y)
 
 if __name__ == '__main__':
     pass

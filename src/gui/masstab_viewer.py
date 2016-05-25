@@ -64,12 +64,12 @@ class MassTabViewerGUI(QDockWidget):
         text = text + "\n" + "=" * 18
         self.ui.plainTextEdit_Viewer.appendPlainText(text)
 
-    def update_filename(self, filename):
+    def update_filename(self, pip):
         log.debug("event from %s", self.sender())
         self.ui.pushButton_Automatic.setEnabled(True)
         self.ui.pushButton_Write.setEnabled(True)
-        self.short_name = os.path.basename(filename)
-        self.dir_name = os.path.dirname(filename)
+        self.short_name = os.path.basename(pip.spectrum_name)
+        self.dir_name = os.path.dirname(pip.spectrum_name)
 
     def clear_text(self):
         log.debug("event from %s", self.sender())

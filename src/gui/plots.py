@@ -7,7 +7,6 @@
 """
 This module manages the GUI of the plots viewer.
 """
-import numpy as np
 import logging
 import matplotlib
 

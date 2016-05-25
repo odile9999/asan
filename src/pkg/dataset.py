@@ -38,6 +38,7 @@ class Dataset(object):
         self.coefs = []
 
         self.__read_file()
+
 #         self.__find_limits()
 
     def __read_file(self):
@@ -47,30 +48,30 @@ class Dataset(object):
         try:
             with open(self.filename, mode='rt', encoding='utf_8') as filer:
                 self.isCalibAvailable = False
-                self.isCalibDone = False
                 index = 0
                 for line in filer:
-                    if line.strip():
-                        if '|' not in line:
-                            self.headtext += line
-                            if '.mz' in line:
-                                self.isCalibAvailable = True
-                            if 'Date' in line:
-                                self.datetime = line.split('Date & Time:')[1].strip()
+                    #                     if line.strip():
+                    if '|' not in line:
+                        self.headtext += line
+                        if '.mz' in line:
+                            self.isCalibAvailable = True
+                        if 'Date' in line:
+                            self.datetime = line.split('Date & Time:')[1].strip()
+                    else:
+                        if self.isCalibAvailable:
+                            self.time.append(
+                                float(line.split('|')[0].strip()))
+                            self.mass.append(
+                                float(line.split('|')[1].strip()))
+                            self.spectrum.append(
+                                float(line.split('|')[2].strip()))
                         else:
-                            if self.isCalibAvailable:
-                                self.time.append(
-                                    float(line.split('|')[0].strip()))
-                                self.mass.append(
-                                    float(line.split('|')[1].strip()))
-                                self.spectrum.append(
-                                    float(line.split('|')[2].strip()))
-                            else:
-                                self.time.append(
-                                    float(line.split('|')[0].strip()))
-                                self.spectrum.append(
-                                    float(line.split('|')[1].strip()))
-                            index += 1
+                            self.time.append(
+                                float(line.split('|')[0].strip()))
+                            self.spectrum.append(
+                                float(line.split('|')[1].strip()))
+                        index += 1
+
             if not self.isCalibAvailable:
                 self.headtext += "\nNO CALIBRATION FILE\n"
                 log.info("No calibration file for mass")
@@ -81,6 +82,37 @@ class Dataset(object):
             log.error("Unable to open : %s", error)
         except (struct.error) as error:
             log.error("Not a valid binary file : %s", error)
+
+    def write_calib(self, calib_name):
+        """
+        Write a calibrated spectrum in ASCII format, store it in a different place
+        """
+        try:
+            log.debug("Written file %s...", calib_name)
+            with open(calib_name, mode='w', encoding='utf_8') as file:
+                file.write(self.headtext)
+                for i in range(self.points):
+                    file.write(str(self.time[i]) + " | " + str(self.mass[i]) + " | " +
+                               str(self.spectrum[i]) + ' |' + "\n")
+
+        except (IOError) as error:
+            log.error("Unable to write into: %s", error)
+        except (struct.error) as error:
+            log.error("Not a valid data file : %s", error)
+
+    def write_mmass(self, mmass_name):
+        """
+        Write a calibrated spectrum in ASCII format, compatible with mmass software
+        """
+        try:
+            log.debug("Written file %s...", mmass_name)
+            with open(mmass_name, mode='w', encoding='utf_8') as file:
+                for i in range(self.points):
+                    file.write(str(self.mass[i]) + " " + str(self.spectrum[i]) + "\n")
+        except (IOError) as error:
+            log.error("Unable to write into: %s", error)
+        except (struct.error) as error:
+            log.error("Not a valid data file : %s", error)
 
     def update_mass(self, calib_mass):
         self.mass = calib_mass

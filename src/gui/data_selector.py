@@ -99,10 +99,10 @@ class DataSelectorGUI(QDockWidget):
         log.debug("event from %s", self.sender())
         self.number = self.ui.comboBox_Number.currentText()
         if self.number:
-            spectrumName = self.filesAndDirs.get_spectrumName(
+            spectrum_name = self.filesAndDirs.get_spectrumName(
                 self.directory, self.exp, self.number)
-            self.analysisRaisedSignal.emit(spectrumName)
-            self.masstabRaisedSignal.emit(spectrumName)
+            self.analysisRaisedSignal.emit(spectrum_name)
+            self.masstabRaisedSignal.emit(spectrum_name)
         else:
             log.error("No data, accumulation not selected")
 

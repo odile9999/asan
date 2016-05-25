@@ -9,6 +9,7 @@ Process PIRENEA data.
 """
 
 import numpy as np
+import os
 from pkg.dataset import Dataset
 from pkg.peaks import Peaks
 import logging
@@ -25,18 +26,43 @@ class Pipeline(object):
         """
         Constructor
         """
-        self.filename = filename
+        self.spectrum_name = filename
         self.__process_file()
 
     def __process_file(self):
         """ operations on files """
-        self.data = Dataset(self.filename)
+        self.data = Dataset(self.spectrum_name)
+        self.set_filenames()
+        self.isCalibFound = False
+
+    def set_filenames(self):
+        self.shortname = os.path.basename(self.spectrum_name)
+        self.plot_filename = self.data.datetime + " - " + self.shortname
+        self.calib_name = self.spectrum_name.replace("Spectra", "Analysis")
+        self.mmass_name = self.spectrum_name.replace("Spectra", "Mmass")
+        if not os.path.exists(os.path.dirname(self.calib_name)):
+            os.makedirs(os.path.dirname(self.calib_name))
+        if not os.path.exists(os.path.dirname(self.mmass_name)):
+            os.makedirs(os.path.dirname(self.mmass_name))
+
+    def calib(self, time_list, mass_list):
+        coefs = self.find_calib(time_list, mass_list)
+        log.info("Polynomial coefs %s", coefs)
+        if len(coefs) == 3:
+            self.isCalibFound = True
+            self.calib_mass(coefs)
+        else:
+            self.isCalibFound = False
+#         print("stats = si faible OK", stats)
+    #     ffit = np.polynomial.polynomial.Polynomial(coefs)
+    #     print("ffit", type(ffit))
 
     def find_calib(self, time_list, mass_list):
         # ordre du polynome 2 : ax2 + bx + c
         # si ordre 3 donne de meilleurs résultats
-        coefs, stats = np.polynomial.polynomial.polyfit(time_list, mass_list, 3, full=True)
-        log.info("Polynomial coefs %s", coefs)
+        # coefs, stats = np.polynomial.polynomial.polyfit(time_list, mass_list, 2, full=True)
+        coefs = np.polynomial.polynomial.polyfit(time_list, mass_list, 2)
+#         log.info("Polynomial coefs %s", coefs)
 #         print("stats = si faible OK", stats)
     #     ffit = np.polynomial.polynomial.Polynomial(coefs)
     #     print("ffit", type(ffit))
@@ -48,6 +74,12 @@ class Pipeline(object):
 #     plt.plot(y, x, 'o', ffit, x_new)
 #     # courbe de masse calibrée
 #     plt.plot(ffit, y_new)
+
+    def write_calib_data(self):
+        self.data.write_calib(self.calib_name)
+
+    def write_mmass_data(self):
+        self.data.write_mmass(self.mmass_name)
 
     def process_peaks(self, xin, yin, mph=0.0, mpd=0, x1=0.0, x2=0.0):
         """
