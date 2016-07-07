@@ -8,6 +8,7 @@
 This module manages the GUI of the data selector.
 """
 from PyQt5.QtWidgets import QDockWidget
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import pyqtSignal
 
 from gui.data_selector_qt import Ui_DockWidget_DataSelector
@@ -32,9 +33,9 @@ class DataSelectorGUI(QDockWidget):
 
     def setup(self):
         self.connect_events()
-        self.fill_year()
 
     def connect_events(self):
+        self.ui.pushButton_ChooseDirectory.clicked.connect(self.choose_directory)
         self.ui.lineEdit_Folder.textChanged.connect(self.fill_year)
         self.ui.comboBox_Year.currentIndexChanged.connect(self.fill_month)
         self.ui.comboBox_Month.currentIndexChanged.connect(self.fill_day)
@@ -43,10 +44,18 @@ class DataSelectorGUI(QDockWidget):
 #         self.ui.checkBox_AutoUpdate.stateChanged.connect(self.toggle_update)
         self.ui.pushButton_StartAnalysis.clicked.connect(self.emit_signals)
 
+    def choose_directory(self):
+        log.debug("event from %s", self.sender())
+        self.ui.comboBox_Year.clear()
+        self.folder = QFileDialog.getExistingDirectory(self, "Choose Spectra Directory",
+                                                       "C:")
+        if str(self.folder).endswith("Spectra"):
+            self.fill_year()
+
     def fill_year(self):
         log.debug("event from %s", self.sender())
         self.ui.comboBox_Year.clear()
-        self.folder = self.ui.lineEdit_Folder.text()
+        self.ui.lineEdit_Folder.setText(self.folder)
         li = self.filesAndDirs.get_years(self.folder)
         if li:
             self.ui.comboBox_Year.addItems(li)

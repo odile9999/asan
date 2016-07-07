@@ -135,7 +135,7 @@
    <widget class="QPushButton" name="pushButton_StartAnalysis">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>80</x>
       <y>150</y>
       <width>130</width>
       <height>23</height>
@@ -146,6 +146,9 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_Folder">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -167,10 +170,10 @@
      </size>
     </property>
     <property name="text">
-     <string>C:\Users\Hassan Sabbah\Desktop\Aroma\Spectra\</string>
+     <string>C:\Users</string>
     </property>
     <property name="readOnly">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QComboBox" name="comboBox_Day">
@@ -298,6 +301,19 @@
     </property>
     <property name="text">
      <string>Number</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_ChooseDirectory">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>32</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Change Root...</string>
     </property>
    </widget>
   </widget>
