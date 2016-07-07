@@ -18,7 +18,7 @@ class FilesAndDirs(object):
     Manage to find spectra in data directories
     """
 
-    def __init__(self, folder="G:", year=2015, month=5, day=12):
+    def __init__(self, folder="F:", year=2015, month=5, day=12):
         """
         Constructor
         """
@@ -96,7 +96,7 @@ class FilesAndDirs(object):
         """
         Return a full path name of one directory
         """
-        self.folder = folder
+        self.folder = os.path.abspath(folder)
         self.year = year
         self.month = month
         self.day = day
@@ -118,9 +118,9 @@ class FilesAndDirs(object):
         if not os.path.isdir(dirname):
             log.error("Not a directory: %s", dirname)
         else:
-            self.files = os.listdir(dirname)
+            self.files = os.listdir(os.path.abspath(dirname))
             for f in self.files:
-                if (f.endswith(".txt")):
+                if (f.endswith(".txt") and f.find("_") > 0):
                     list_exp.append(f[:f.rfind("_")])
             """ remove duplicate names and sort the lists """
             list_exp = list(dict().fromkeys(list_exp).keys())
