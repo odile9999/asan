@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>983</width>
     <height>120</height>
    </rect>
   </property>
@@ -429,6 +429,19 @@
     </property>
     <property name="text">
      <string>FILENAME</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_ChangeMassSelector">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>40</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Change Mass Selector</string>
     </property>
    </widget>
   </widget>

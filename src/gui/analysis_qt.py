@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_DockWidget_Analysis(object):
     def setupUi(self, DockWidget_Analysis):
         DockWidget_Analysis.setObjectName("DockWidget_Analysis")
-        DockWidget_Analysis.resize(900, 120)
+        DockWidget_Analysis.resize(983, 120)
         DockWidget_Analysis.setMinimumSize(QtCore.QSize(900, 120))
         DockWidget_Analysis.setMaximumSize(QtCore.QSize(1050, 200))
         self.dockWidgetContents = QtWidgets.QWidget()
@@ -135,6 +135,9 @@ class Ui_DockWidget_Analysis(object):
         self.label_Filename = QtWidgets.QLabel(self.dockWidgetContents)
         self.label_Filename.setGeometry(QtCore.QRect(20, 10, 60, 16))
         self.label_Filename.setObjectName("label_Filename")
+        self.pushButton_ChangeMassSelector = QtWidgets.QPushButton(self.dockWidgetContents)
+        self.pushButton_ChangeMassSelector.setGeometry(QtCore.QRect(860, 40, 121, 23))
+        self.pushButton_ChangeMassSelector.setObjectName("pushButton_ChangeMassSelector")
         DockWidget_Analysis.setWidget(self.dockWidgetContents)
 
         self.retranslateUi(DockWidget_Analysis)
@@ -154,4 +157,5 @@ class Ui_DockWidget_Analysis(object):
         self.label_EndMass.setText(_translate("DockWidget_Analysis", "End Mass"))
         self.pushButton_UpdatePlots.setText(_translate("DockWidget_Analysis", "Update Plots"))
         self.label_Filename.setText(_translate("DockWidget_Analysis", "FILENAME"))
+        self.pushButton_ChangeMassSelector.setText(_translate("DockWidget_Analysis", "Change Mass Selector"))
 

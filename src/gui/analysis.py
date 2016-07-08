@@ -23,6 +23,7 @@ class AnalysisGUI(QDockWidget):
     """
     parametersRaisedSignal = pyqtSignal(object)
     masstabRaisedSignal = pyqtSignal(object)
+    masstabSelectorRaisedSignal = pyqtSignal(object)
     plotTimeRaisedSignal = pyqtSignal(object, object, object)
     plotMassRaisedSignal = pyqtSignal(object, object, object, bool)
     plotCalibRaisedSignal = pyqtSignal(object, object, object, object, object)
@@ -55,6 +56,7 @@ class AnalysisGUI(QDockWidget):
         self.ui.spinBox_PeakDistance.valueChanged.connect(self.peaks_event)
         self.ui.doubleSpinBox_StartMass.valueChanged.connect(self.peaks_event)
         self.ui.doubleSpinBox_EndMass.valueChanged.connect(self.peaks_event)
+        self.ui.pushButton_ChangeMassSelector.clicked.connect(self.emit_change_mass_selector)
 
     def mass_event(self):
         log.debug("event from %s", self.sender())
@@ -147,6 +149,15 @@ class AnalysisGUI(QDockWidget):
             self.pip.plot_filename, x, y, xind, yind,
             float(self.mph), int(self.mpd), float(self.peaks_x1),
             float(self.peaks_x2))
+
+    def emit_change_mass_selector(self):
+        # Update plot for mass
+        x = self.pip.data.mass
+        y = self.pip.data.spectrum
+        mph, mpd, x, y, xind, yind = self.pip.process_peaks(x, y, self.mph, self.mpd,
+                                                            self.peaks_x1, self.peaks_x2)
+        # Update plot for peaks
+        self.masstabSelectorRaisedSignal.emit(xind)
 
     def emit_plot_calib(self):
         #         log.debug("event from %s", self.sender())

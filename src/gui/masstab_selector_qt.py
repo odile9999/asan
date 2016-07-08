@@ -11,8 +11,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_DockWidget_MassTabSelector(object):
     def setupUi(self, DockWidget_MassTabSelector):
         DockWidget_MassTabSelector.setObjectName("DockWidget_MassTabSelector")
-        DockWidget_MassTabSelector.resize(120, 382)
-        DockWidget_MassTabSelector.setMinimumSize(QtCore.QSize(120, 300))
+        DockWidget_MassTabSelector.resize(150, 338)
+        DockWidget_MassTabSelector.setMinimumSize(QtCore.QSize(150, 300))
         DockWidget_MassTabSelector.setMaximumSize(QtCore.QSize(150, 700))
         DockWidget_MassTabSelector.setFeatures(QtWidgets.QDockWidget.DockWidgetFloatable|QtWidgets.QDockWidget.DockWidgetMovable)
         DockWidget_MassTabSelector.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)

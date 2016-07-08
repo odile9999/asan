@@ -10,6 +10,7 @@ This module manages the GUI of the masstab selector.
 from PyQt5.QtWidgets import QDockWidget
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import Qt
 
 from gui.masstab_selector_qt import Ui_DockWidget_MassTabSelector
 import logging
@@ -30,7 +31,8 @@ class MassTabSelectorGUI(QDockWidget):
         self.ui = Ui_DockWidget_MassTabSelector()
         self.ui.setupUi(self)
 
-    def setup(self):
+    def setup(self, analysis):
+        self.ana = analysis
         self.__connect_events()
 
     def __connect_events(self):
@@ -59,6 +61,27 @@ class MassTabSelectorGUI(QDockWidget):
         self.model.itemChanged.connect(self.change_list)
         # changes in button
         self.ui.pushButton_ChangeList.clicked.connect(self.emit_list_signal)
+        # get peaks found and update automatically the mass list
+        self.ana.masstabSelectorRaisedSignal.connect(self.update_list_view)
+
+    def update_list_view(self, xind):
+        self.mass_list = []
+        for i in range(len(xind)):
+            m = "{:.1f}".format(float(xind[i]))
+            self.mass_list.append(str(m))
+        self.model.clear()
+        self.model = QStandardItemModel()
+
+        for mass in self.mass_list:
+            item = QStandardItem(mass)
+            item.setCheckable(True)
+            item.setEditable(True)
+            item.setCheckState(Qt.Checked)
+            self.model.appendRow(item)
+        self.view = self.ui.listView_Mass
+        self.view.setModel(self.model)
+        # changes in one item, don't know which one
+        self.model.itemChanged.connect(self.change_list)
 
     def change_list(self):
         log.debug("event from %s", self.sender())
